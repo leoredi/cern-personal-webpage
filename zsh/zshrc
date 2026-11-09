@@ -1,0 +1,113 @@
+# ~/.zshrc — interactive shells only. Agents running `zsh -c` never read this.
+
+# ---- Bail out early for AI agents ---------------------------------------
+# Claude Code exports CLAUDECODE=1. Anything after this line is for humans.
+[[ -n "$CLAUDECODE" ]] && return
+[[ -o interactive ]] || return
+
+# ---- Completion ----------------------------------------------------------
+# Homebrew puts completions (brew, git, gh, docker, cmake, ...) here.
+# brew shellenv does NOT add this to fpath, so do it by hand, before compinit.
+# (On Ubuntu, apt packages already install theirs in the default fpath.)
+if [[ -n "$HOMEBREW_PREFIX" ]]; then
+  fpath=("$HOMEBREW_PREFIX/share/zsh/site-functions" $fpath)
+fi
+setopt extended_glob            # needed for the (#q...) qualifier below
+autoload -Uz compinit
+# Rebuild the dump once a day, otherwise use the cache (fast startup)
+if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
+  compinit
+else
+  compinit -C
+fi
+zstyle ':completion:*' menu select                       # arrow-key menu
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # case-insensitive
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f'
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path "$HOME/.cache/zsh/compcache"
+mkdir -p "$HOME/.cache/zsh"
+
+# ---- History -------------------------------------------------------------
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=100000
+SAVEHIST=100000
+setopt extended_history        # timestamps
+setopt hist_ignore_all_dups    # drop older duplicates
+setopt hist_ignore_space       # " cmd" is not recorded
+setopt hist_reduce_blanks
+setopt share_history           # shared across open terminals
+setopt inc_append_history
+
+# ---- Options -------------------------------------------------------------
+setopt auto_cd                 # type a directory name to cd into it
+setopt auto_pushd pushd_ignore_dups pushd_silent
+setopt interactive_comments    # allow # comments on the command line
+setopt no_beep
+setopt extended_glob
+# Deliberately NOT set: correct / correct_all (the "nyae?" prompt hangs agents
+# and annoys humans), noclobber, rm_star_silent tricks.
+
+# ---- Keys ----------------------------------------------------------------
+bindkey -e                                       # emacs keys (vanilla)
+autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey '^[[A' up-line-or-beginning-search       # Up: history matching prefix
+bindkey '^[[B' down-line-or-beginning-search     # Down
+bindkey '^[[1;3C' forward-word                   # Alt+Right
+bindkey '^[[1;3D' backward-word                  # Alt+Left
+bindkey '^[[3~' delete-char                      # Fn+Delete
+
+# ---- Aliases (additive only: never redefine ls, cat, grep, rm, ...) ------
+if [[ $OSTYPE == darwin* ]]; then
+  export CLICOLOR=1; _c=''                       # colour for BSD ls
+else
+  eval "$(dircolors -b)"; _c=' --color=auto'     # colour for GNU ls
+fi
+alias ll="ls -lhF$_c"
+alias la="ls -lahF$_c"
+alias l="ls -F$_c"
+unset _c
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias -- -='cd -'
+alias md='mkdir -p'
+alias path='print -l $path'
+(( $+commands[brew] )) && alias brewup='brew update && brew upgrade && brew cleanup'
+[[ -r /etc/debian_version ]] && alias aptup='sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove -y'
+mkcd() { mkdir -p "$1" && cd "$1"; }
+
+# HEP environments, on demand only (edit the paths to match your installs)
+rootenv() { source "${1:-$HOMEBREW_PREFIX}/bin/thisroot.sh" && echo "ROOT $(root-config --version)"; }
+g4env()   { source "${1:-$HOMEBREW_PREFIX}/bin/geant4.sh"  && echo "Geant4 ready"; }
+
+# ---- Prompt (single line, git branch, nothing on the right) --------------
+autoload -Uz vcs_info
+zstyle ':vcs_info:git:*' formats ' %F{magenta}%b%f%c%u'
+zstyle ':vcs_info:git:*' actionformats ' %F{magenta}%b|%a%f'
+zstyle ':vcs_info:git:*' check-for-changes true
+zstyle ':vcs_info:git:*' stagedstr '%F{green}+%f'
+zstyle ':vcs_info:git:*' unstagedstr '%F{red}*%f'
+precmd() { vcs_info }
+setopt prompt_subst
+PROMPT='%F{cyan}%1~%f${vcs_info_msg_0_} %(?.%F{green}.%F{red})%#%f '
+
+# ---- Optional plugins (purely visual, skipped if absent) ----------------
+# macOS:  brew install zsh-autosuggestions zsh-syntax-highlighting
+# Ubuntu: sudo apt install zsh-autosuggestions zsh-syntax-highlighting
+for _d in "$HOMEBREW_PREFIX/share" /usr/share; do
+  [[ -r $_d/zsh-autosuggestions/zsh-autosuggestions.zsh ]] || continue
+  source $_d/zsh-autosuggestions/zsh-autosuggestions.zsh; break
+done
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+# syntax highlighting must be sourced LAST
+for _d in "$HOMEBREW_PREFIX/share" /usr/share; do
+  [[ -r $_d/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] || continue
+  source $_d/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh; break
+done
+unset _d
+
+# ---- Machine-local extras (not in git) ----------------------------------
+[[ -r "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"

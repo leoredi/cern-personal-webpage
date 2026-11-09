@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Classical playlists · Federico Leo Redi</title>
+  <meta name="description" content="A small side page collecting classical music and soundtrack playlists curated by Federico Leo Redi.">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg">
+  <link rel="alternate icon" type="image/x-icon" href="../../assets/img/favicon.ico" sizes="16x16 32x32">
+  <link rel="apple-touch-icon" href="../../assets/img/apple-touch-icon.png">
+  <link rel="stylesheet" href="../../assets/css/plain.css">
+</head>
+<body>
+  <a class="skip-link" href="#playlists">Skip to content</a>
+
+  <div class="sheet">
+
+    <header class="masthead">
+      <div class="masthead-text">
+        <p class="trail"><a href="../../">Federico Leo Redi</a></p>
+        <h1>Classical playlists</h1>
+        <p class="standfirst">A small side page with classical music and soundtrack playlists.</p>
+      </div>
+    </header>
+
+    <main>
+
+      <section id="playlists" aria-labelledby="playlists-h">
+        <h2 id="playlists-h">Available playlists</h2>
+        <div class="prose">
+          <p>These playlists were put together for Ciuffi Fadini and Adele. The page is kept outside the main navigation but is part of the public site.</p>
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Playlist</th>
+                <th scope="col">Tracks</th>
+              </tr>
+            </thead>
+            <tbody id="playlist-body">
+              <tr><td colspan="2">Loading playlists...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="colophon">
+      <p>This is a personal page and does not speak for CERN, LHCb, INFN, or the University of Bergamo. <a href="../../">Back to the home page</a>.</p>
+    </footer>
+
+  </div>
+
+  <script>
+    function parseCSV(text) {
+      const lines = text.trim().split('\n');
+      const rows = [];
+
+      for (let i = 1; i < lines.length; i += 1) {
+        const line = lines[i];
+        if (!line.trim()) {
+          continue;
+        }
+
+        const matches = line.match(/(".*?"|[^,]+)(?=\s*,|\s*$)/g);
+        if (matches && matches.length >= 3) {
+          rows.push({
+            name: matches[0].replace(/^"|"$/g, '').trim(),
+            url: matches[1].replace(/^"|"$/g, '').trim(),
+            tracks: matches[2].replace(/^"|"$/g, '').trim()
+          });
+        }
+      }
+
+      return rows;
+    }
+
+    function escapeHTML(str) {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    fetch('assets/classical_playlists.csv')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to load CSV');
+        }
+
+        return response.text();
+      })
+      .then(text => {
+        const playlists = parseCSV(text);
+        const tbody = document.getElementById('playlist-body');
+
+        if (playlists.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="2">No playlists found.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = playlists.map(playlist => `
+          <tr>
+            <td><a href="${escapeHTML(playlist.url)}" target="_blank" rel="noopener">${escapeHTML(playlist.name)}</a></td>
+            <td>${escapeHTML(playlist.tracks)}</td>
+          </tr>
+        `).join('');
+      })
+      .catch(error => {
+        document.getElementById('playlist-body').innerHTML =
+          '<tr><td colspan="2">Error loading playlists.</td></tr>';
+        console.error(error);
+      });
+  </script>
+</body>
+</html>

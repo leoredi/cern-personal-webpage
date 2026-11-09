@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Our Star Map</title>
+  <style>
+    :root {
+      --bg0: #030d1d;
+      --bg1: #0a1f40;
+      --bg2: #123865;
+      --ink: #f3f7ff;
+      --soft: #b6c8e5;
+      --gold: #f2cf88;
+      --line: rgba(242, 207, 136, 0.3);
+      --card: rgba(8, 25, 48, 0.82);
+      --maxw: 1120px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+      line-height: 1.46;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.14) 0 1px, transparent 1px),
+        radial-gradient(circle at 78% 8%, rgba(255, 255, 255, 0.11) 0 1px, transparent 1px),
+        radial-gradient(circle at 66% 72%, rgba(255, 255, 255, 0.1) 0 1px, transparent 1px),
+        linear-gradient(168deg, var(--bg0), var(--bg1) 35%, var(--bg2));
+      background-size: 3px 3px, 3px 3px, 3px 3px, cover;
+    }
+
+    .wrap {
+      width: min(var(--maxw), 92vw);
+      margin: 0 auto;
+      padding: 2.2rem 0 4rem;
+    }
+
+    header {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 2rem 1.5rem;
+      background: linear-gradient(120deg, rgba(8, 27, 54, 0.92), rgba(18, 49, 89, 0.85));
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.28);
+    }
+
+    h1, h2 {
+      margin: 0 0 0.45rem;
+      color: var(--gold);
+      line-height: 1.2;
+    }
+
+    h1 {
+      font-size: clamp(1.8rem, 4vw, 3.1rem);
+      letter-spacing: 0.02em;
+    }
+
+    h2 {
+      font-size: clamp(1.24rem, 2.5vw, 1.9rem);
+      margin-top: 2.15rem;
+    }
+
+    h3 {
+      margin: 0;
+      color: var(--gold);
+      font-size: 1.05rem;
+      line-height: 1.25;
+    }
+
+    p { margin: 0.62rem 0 0; }
+
+    .lead {
+      margin: 0.68rem 0 0;
+      font-size: clamp(1rem, 1.9vw, 1.18rem);
+      max-width: 74ch;
+    }
+
+    .pin {
+      margin-top: 1rem;
+      padding: 0.86rem 1rem;
+      border-left: 3px solid var(--gold);
+      background: rgba(0, 0, 0, 0.2);
+      color: var(--soft);
+      font-family: "Menlo", "SFMono-Regular", "Courier New", monospace;
+      font-size: 0.84rem;
+      line-height: 1.45;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--card);
+      padding: 1rem;
+      margin-top: 0.95rem;
+    }
+
+    .stamp {
+      margin: 0.18rem 0 0.75rem;
+      color: var(--soft);
+      font-family: "Menlo", "SFMono-Regular", "Courier New", monospace;
+      font-size: 0.82rem;
+    }
+
+    .two {
+      display: grid;
+      gap: 0.82rem;
+      grid-template-columns: 1fr;
+    }
+
+    .three {
+      display: grid;
+      gap: 0.82rem;
+      grid-template-columns: 1fr;
+      margin-top: 0.82rem;
+    }
+
+    .compare-top { margin-top: 0.82rem; }
+
+    figure.portrait {
+      text-align: center;
+    }
+
+    figure.portrait img {
+      width: min(100%, 560px);
+      margin: 0 auto;
+    }
+
+    @media (min-width: 820px) {
+      .two { grid-template-columns: 1fr 1fr; }
+      .three { grid-template-columns: 1fr 1fr 1fr; }
+    }
+
+    figure {
+      margin: 0;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 11px;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 0.55rem;
+    }
+
+    figure img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 7px;
+    }
+
+    figcaption {
+      margin-top: 0.44rem;
+      color: var(--soft);
+      font-size: 0.82rem;
+    }
+
+    .timeline {
+      margin-top: 1rem;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .refs {
+      margin-top: 0.9rem;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(8, 24, 47, 0.78);
+      padding: 0.95rem 1rem;
+    }
+
+    .refs h3 { font-size: 0.98rem; }
+
+    .refs a {
+      color: var(--ink);
+      text-decoration: underline;
+      text-decoration-color: rgba(242, 207, 136, 0.7);
+      text-underline-offset: 2px;
+    }
+
+    .refs ul {
+      margin: 0.52rem 0 0;
+      padding-left: 1rem;
+    }
+
+    .refs li { margin-top: 0.36rem; }
+
+    .meta-proof {
+      margin-top: 0.65rem;
+      padding: 0.65rem 0.75rem;
+      border-radius: 9px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(0, 0, 0, 0.24);
+      font-family: "Menlo", "SFMono-Regular", "Courier New", monospace;
+      color: var(--soft);
+      font-size: 0.76rem;
+      line-height: 1.45;
+      word-break: break-word;
+    }
+
+    .final {
+      margin-top: 2.2rem;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 1.2rem;
+      background: linear-gradient(160deg, rgba(10, 31, 60, 0.95), rgba(7, 21, 41, 0.93));
+    }
+
+    .actions {
+      margin-top: 0.88rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+    }
+
+    .actions a {
+      text-decoration: none;
+      color: #081320;
+      background: var(--gold);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 999px;
+      padding: 0.48rem 0.86rem;
+      font-weight: 700;
+      font-family: "Menlo", "SFMono-Regular", "Courier New", monospace;
+      font-size: 0.78rem;
+    }
+
+    .footer {
+      margin-top: 1.8rem;
+      color: var(--soft);
+      border-top: 1px solid var(--line);
+      padding-top: 0.9rem;
+      font-size: 0.92rem;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <h1>dedeHorizon is back!</h1>
+      <p class="lead">
+        I wanted one honest image: the sky from one exact place, at one exact instant,
+        tied to our memory of Leonard Cohen in Piazza Santa Croce. I started by studying
+        commercial star-map products, then built my own physically grounded version.
+        This page starts with the research I did, then tells how I built the final poster.
+      </p>
+      <div class="pin">
+        Chosen spacetime pin:
+        <code>2010-09-01T20:00:00Z @ 43.77N 11.25E (J2000)</code><br>
+        Converted to local Florence time (Europe/Rome): <code>2010-09-01 22:00 CEST</code>,
+        about 45 minutes after the concert start at 21:15.
+      </div>
+    </header>
+
+    <section>
+      <h2>Literature Review I - How To Identify One Point In Spacetime</h2>
+
+      <article class="card">
+        <h3>What is minimally necessary</h3>
+        <p>
+          A physically meaningful sky "pin" needs three ingredients: exact time, exact observer location,
+          and a reference frame. I used an ISO-like UTC timestamp with a trailing <code>Z</code>, geographic latitude/longitude,
+          and an astronomical frame label (<code>J2000</code>).
+        </p>
+        <p>
+          For astronomy, this works because the observed sky (altitude/azimuth) depends on observer latitude and local hour angle;
+          so if time or location changes, the sky map changes.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>From "Earth pin" to "universal pin"</h3>
+        <p>
+          For this gift, an Earth-based pin is exactly what I needed. But I also reviewed how astronomy goes beyond Earth-centric notation:
+          ICRF (quasar-based inertial frame), Solar-System barycentric framing, and the Voyager pulsar-map concept for universal localization.
+        </p>
+        <p>
+          So this project intentionally uses a human/terrestrial pin (because the memory is terrestrial),
+          while still respecting professional astronomical standards.
+        </p>
+      </article>
+
+      <div class="refs">
+        <h3>Key sources consulted</h3>
+        <ul>
+          <li>
+            RFC 3339 profile of ISO-like date/time strings:
+            <a href="https://www.rfc-editor.org/rfc/rfc3339" target="_blank" rel="noopener">rfc-editor.org/rfc/rfc3339</a>
+          </li>
+          <li>
+            U.S. Naval Observatory: relation of local sky coordinates to location/time:
+            <a href="https://aa.usno.navy.mil/faq/alt_az" target="_blank" rel="noopener">aa.usno.navy.mil/faq/alt_az</a>
+          </li>
+          <li>
+            U.S. Naval Observatory: J2000 epoch (JD 2451545.0, TT):
+            <a href="https://aa.usno.navy.mil/faq/TT" target="_blank" rel="noopener">aa.usno.navy.mil/faq/TT</a>
+          </li>
+          <li>
+            IERS/ICRF background (quasar-tied celestial frame):
+            <a href="https://www.iers.org/IERS/EN/Science/ICRF/ICRF.html" target="_blank" rel="noopener">iers.org - ICRF</a>
+          </li>
+          <li>
+            NASA/JPL Voyager Golden Record pulsar map:
+            <a href="https://science.nasa.gov/mission/voyager/golden-record-cover/" target="_blank" rel="noopener">science.nasa.gov - Golden Record cover</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Literature Review II - Milky Way Representation</h2>
+
+      <article class="card">
+        <h3>What I started from: commercial star maps</h3>
+        <p>
+          My very first step was reviewing commercially available star-map styles.
+          They are often elegant visually, but usually generic from a physics standpoint:
+          no explicit observer coordinates, no strict timestamp in UTC, no clear frame declaration,
+          and no transparent planetary ephemerides.
+        </p>
+        <p>
+          That is perfect for decoration, but not enough for a true "this was our sky at that instant" poster.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>My first in-house attempt: vector Milky Way</h3>
+        <p>
+          After that benchmark, I built my own vector-style Milky Way layer. In theory vectors are elegant and resolution-independent.
+          In practice, long polygon segments in sky coordinates can misbehave after projection (RA wrap, pole behavior, and ring closure),
+          creating artificial wedges or bridges.
+        </p>
+        <p>
+          The full render below shows the kind of artifact I needed to eliminate.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>The approach that fixed it</h3>
+        <p>
+          I moved to a full-sky intensity map approach and reprojected it onto the local observing dome.
+          The source I used is NASA SVS "Deep Star Maps 2020" (OpenEXR all-sky products).
+          This avoids polygon-topology artifacts and preserves a realistic Milky Way structure.
+        </p>
+        <div class="meta-proof">
+          Embedded provenance in my output PNG metadata:<br>
+          <code>Milky Way Image: From NASA's Scientific Visualization Studio (SVS) "Deep Star Maps 2020". Source: https://svs.gsfc.nasa.gov/4851</code>
+        </div>
+      </article>
+
+      <figure class="portrait">
+        <img src="assets/img/navy_star_map_WRONG_render.png" alt="Full render of early wrong vector Milky Way attempt">
+        <figcaption>Full render of my early vector Milky Way attempt (<code>navy_star_map_WRONG.svg</code>).</figcaption>
+      </figure>
+
+      <div class="two compare-top">
+        <figure>
+          <img src="assets/img/wrong.jpg" alt="Commercial-style static map example">
+          <figcaption>Commercial reference style: visually clean, but physically generic.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/img/sky_mw_only.png" alt="Milky Way-only physically reprojected result">
+          <figcaption>My physically reprojected Milky Way layer (observer/time dependent).</figcaption>
+        </figure>
+      </div>
+
+      <div class="refs">
+        <h3>Key sources consulted</h3>
+        <ul>
+          <li>
+            NASA SVS Deep Star Maps 2020 (dataset and notes):
+            <a href="https://svs.gsfc.nasa.gov/4851/" target="_blank" rel="noopener">svs.gsfc.nasa.gov/4851</a>
+          </li>
+          <li>
+            NASA SVS explanation of map projection and transformations:
+            <a href="https://svs.gsfc.nasa.gov/4851/" target="_blank" rel="noopener">projection notes on same page</a>
+          </li>
+          <li>
+            IAU historical standardization of constellation boundaries (for context on sky chart conventions):
+            <a href="https://www.iau.org/public/themes/constellations/" target="_blank" rel="noopener">iau.org/public/themes/constellations</a>
+          </li>
+          <li>
+            ESA Gaia all-sky map resources (alternative physically grounded map family):
+            <a href="https://www.cosmos.esa.int/web/gaia/iow_20210520" target="_blank" rel="noopener">cosmos.esa.int - Gaia map resources</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>How The Poster Evolved</h2>
+      <div class="timeline">
+        <article class="card">
+          <h3>1) Starting point: commercial references, then first own drafts</h3>
+          <p class="stamp">January 22, 2026 - early afternoon</p>
+          <p>
+            I began from commercially available visual references, identified what felt physically generic,
+            and then moved to my first own drafts to lock mood and composition.
+            Useful first pass, but still wrong in geometry and scientific fidelity.
+          </p>
+          <figure>
+            <img src="assets/img/navy_star_map_wrong.png" alt="Early draft">
+            <figcaption>Early draft stage.</figcaption>
+          </figure>
+        </article>
+
+        <article class="card">
+          <h3>2) Sky realism baseline</h3>
+          <p class="stamp">January 22, 2026 - afternoon</p>
+          <p>
+            I then focused on physical consistency: horizon filtering, realistic star magnitudes,
+            and first stable Milky Way reprojection.
+          </p>
+          <div class="two">
+            <figure>
+              <img src="assets/img/sky_mw_only.png" alt="Milky Way test layer">
+              <figcaption>Milky Way-only test layer.</figcaption>
+            </figure>
+            <figure>
+              <img src="assets/img/sky.png" alt="Sky baseline result">
+              <figcaption>Baseline realistic sky output.</figcaption>
+            </figure>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>3) Printable A2 composition</h3>
+          <p class="stamp">January 22, 2026 - late afternoon</p>
+          <p>
+            After the sky model was stable, I built the A2 poster with quote, title, border, and balanced typography.
+          </p>
+          <div class="two">
+            <figure>
+              <img src="assets/img/poster_a2_mw_only.png" alt="A2 Milky Way layer">
+              <figcaption>A2 Milky Way layer.</figcaption>
+            </figure>
+            <figure>
+              <img src="assets/img/poster_a2.png" alt="A2 poster">
+              <figcaption>A2 full poster.</figcaption>
+            </figure>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>4) Square redesign + final polish</h3>
+          <p class="stamp">January 23, 2026</p>
+          <p>
+            Final phase: square format, spacing corrections, monofix typography choice, and high-resolution export.
+          </p>
+          <div class="two">
+            <figure>
+              <img src="assets/img/poster_18x18_highres.png" alt="High-resolution square version">
+              <figcaption>18x18 high-resolution export.</figcaption>
+            </figure>
+            <figure>
+              <img src="assets/img/poster_square.png" alt="Final square poster">
+              <figcaption>Final square poster.</figcaption>
+            </figure>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="final">
+      <h2>Final Result</h2>
+      <p>
+        Final poster file: <code>assets/img/poster_square.png</code> (5400 x 5400).
+      </p>
+      <figure>
+        <img src="assets/img/poster_square.png" alt="Final star map">
+      </figure>
+      <div class="actions">
+        <a href="assets/img/poster_square.png">Open Final PNG</a>
+        <a href="assets/img/poster_18x18_highres.png">Open 18x18 High-Res</a>
+      </div>
+    </section>
+
+    <p class="footer">
+      Built as one exact sky for one exact memory.
+    </p>
+  </main>
+</body>
+</html>

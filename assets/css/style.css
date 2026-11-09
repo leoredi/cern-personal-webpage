@@ -1,91 +1,275 @@
+/* Federico Leo Redi — fredi.web.cern.ch
+   One page. Section headings sit in the left margin, as in a scholarly
+   edition; the text keeps a single measured column beside them. */
+
 :root {
-  color-scheme: light dark;
-  --font-body: 'Helvetica Neue', Arial, sans-serif;
-  --font-serif: 'Georgia', 'Times New Roman', serif;
-  --colour-bg: #f9f9f9;
-  --colour-text: #1c1c1c;
-  --colour-accent: #004b87;
+  --paper:    #fdfcf8;
+  --ink:      #16150f;
+  --ink-2:    #45423a;
+  --ink-3:    #7a756a;
+  --rule:     #ded9cd;
+  --accent:   #7c2d21;
+  --accent-2: #5a1f16;
+
+  --serif: "EB Garamond", "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+  --mono:  "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --gutter: 8rem;    /* the marginal heads */
+  --measure: 34rem;  /* the text column    */
 }
 
-* {
-  box-sizing: border-box;
-}
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
 
 body {
   margin: 0;
-  font-family: var(--font-body);
-  line-height: 1.6;
-  background-color: var(--colour-bg);
-  color: var(--colour-text);
+  padding: 5.5rem 2rem 4rem;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 20px;
+  line-height: 1.58;
+  font-variant-numeric: oldstyle-nums proportional-nums;
+  font-feature-settings: "kern" 1, "liga" 1, "onum" 1;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-a {
-  color: var(--colour-accent);
-  text-decoration: none;
-}
+::selection { background: #e8ded2; color: var(--ink); }
 
-a:hover,
-a:focus {
-  text-decoration: underline;
-}
-
-header {
-  padding: 1.5rem 1rem 1rem;
-  background-color: #ffffff;
-  border-bottom: 1px solid #d9d9d9;
-}
-
-.site-title {
-  margin: 0;
-  font-size: 1.75rem;
-}
-
-nav {
-  margin-top: 0.75rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-main {
-  padding: 2rem 1rem 3rem;
-  max-width: 960px;
+.sheet {
+  max-width: calc(var(--gutter) + var(--measure) + 2.25rem);
   margin: 0 auto;
 }
 
-section + section {
-  margin-top: 2.5rem;
+/* ---- Links ------------------------------------------------------------ */
+
+a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 0.5px;
+  text-underline-offset: 0.16em;
+  text-decoration-color: #c9a79e;
 }
+
+a:hover { color: var(--accent-2); text-decoration-color: currentColor; }
+
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  text-decoration: none;
+}
+
+/* Superscripts (B⁰ → μ⁺μ⁻) that do not open up the line spacing. */
+sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  padding: 0.35rem 0.7rem;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  text-decoration: none;
+}
+.skip-link:focus { top: 1rem; }
+
+/* ---- Masthead --------------------------------------------------------- */
+
+.masthead {
+  display: flex;
+  align-items: flex-start;
+  gap: 2.75rem;
+}
+
+.masthead-text { flex: 1 1 auto; min-width: 0; }
+
+h1 {
+  margin: 0;
+  font-size: 2.6rem;
+  font-weight: 500;
+  line-height: 1.06;
+  letter-spacing: -0.008em;
+}
+
+.standfirst {
+  max-width: var(--measure);
+  margin: 0.85rem 0 0;
+  color: var(--ink-2);
+  font-size: 1.06rem;
+  line-height: 1.5;
+}
+
+.portrait {
+  flex: 0 0 auto;
+  width: 132px;
+  height: 132px;
+  object-fit: cover;
+  border: 1px solid var(--rule);
+}
+
+/* Where to find the rest of the record. */
+
+.elsewhere {
+  margin: 1.6rem 0 0;
+  padding: 0 0 1.6rem;
+  border-bottom: 1px solid var(--ink);
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 1.5rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  line-height: 1.8;
+}
+
+.elsewhere a { color: var(--ink-2); text-decoration-color: var(--rule); }
+.elsewhere a:hover { color: var(--accent); text-decoration-color: currentColor; }
+
+/* ---- Sections: heading in the margin, text in the column --------------- */
+
+section {
+  display: grid;
+  grid-template-columns: var(--gutter) minmax(0, var(--measure));
+  column-gap: 2.25rem;
+  padding: 2.5rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+section:last-of-type { border-bottom: none; padding-bottom: 0; }
 
 h2 {
-  font-family: var(--font-serif);
-  margin-bottom: 0.75rem;
-  font-weight: 600;
-}
-
-ul,
-ol {
-  padding-left: 1.1rem;
-}
-
-footer {
-  padding: 1.5rem 1rem;
-  text-align: center;
-  font-size: 0.9rem;
-  border-top: 1px solid #d9d9d9;
-  background-color: #ffffff;
-}
-
-figure {
+  grid-column: 1;
   margin: 0;
+  padding-top: 0.42em;
+  font-size: 0.86rem;
+  font-weight: 500;
+  font-variant: small-caps;
+  letter-spacing: 0.075em;
+  line-height: 1.45;
+  color: var(--ink-3);
 }
 
-@media (max-width: 640px) {
-  header {
-    text-align: center;
+.prose { grid-column: 2; }
+
+.prose p {
+  margin: 0 0 1.05rem;
+  hyphens: auto;
+}
+.prose p:last-child { margin-bottom: 0; }
+
+.prose .aside {
+  margin-top: 1.15rem;
+  font-size: 0.93rem;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+/* ---- News: a short dated list, dates in the mono of the labels --------- */
+
+.news {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.news li { margin: 0 0 0.9rem; }
+.news li:last-child { margin-bottom: 0; }
+
+.news time {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  line-height: 1.8;
+  color: var(--ink-3);
+}
+
+/* ---- Colophon --------------------------------------------------------- */
+
+.colophon {
+  margin-top: 3.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  line-height: 1.95;
+  letter-spacing: 0.01em;
+  color: var(--ink-3);
+}
+
+.colophon p { margin: 0; }
+.colophon a { color: var(--ink-3); text-decoration-color: var(--rule); }
+.colophon a:hover { color: var(--accent); }
+
+/* ---- Redirect stubs ---------------------------------------------------- */
+
+.stub { max-width: 30rem; }
+.stub h1 { font-size: 1.6rem; }
+.stub p { margin: 1.1rem 0 0; font-size: 1.02rem; }
+
+/* ---- Narrow screens ---------------------------------------------------- */
+
+@media (max-width: 44rem) {
+  body { padding: 3rem 1.4rem 3rem; font-size: 18px; }
+
+  h1 { font-size: 2rem; }
+
+  .masthead { flex-direction: column; gap: 1.25rem; }
+  .portrait { width: 88px; height: 88px; order: 2; }
+  .standfirst { font-size: 1rem; max-width: none; }
+
+  .elsewhere { margin-top: 1.3rem; padding-bottom: 1.3rem; }
+
+  section {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 1.9rem 0;
   }
 
-  nav {
-    justify-content: center;
+  h2 { grid-column: 1; padding-top: 0; margin-bottom: 0.85rem; }
+  .prose { grid-column: 1; }
+}
+
+/* ---- Print ------------------------------------------------------------- */
+
+@media print {
+  body {
+    padding: 0;
+    background: #fff;
+    color: #000;
+    font-size: 11pt;
+    line-height: 1.45;
   }
+
+  .skip-link, .portrait { display: none; }
+
+  a { color: #000; text-decoration: none; }
+
+  section {
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+    column-gap: 14pt;
+    padding: 12pt 0;
+    page-break-inside: avoid;
+  }
+}
+
+/* ---- Dark -------------------------------------------------------------- */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper:    #14130f;
+    --ink:      #eae5d9;
+    --ink-2:    #b3ada0;
+    --ink-3:    #857f72;
+    --rule:     #3a372f;
+    --accent:   #d99d8c;
+    --accent-2: #eebdaf;
+  }
+
+  a { text-decoration-color: #7a5348; }
+  ::selection { background: #3d3227; color: var(--ink); }
 }

@@ -15,3 +15,12 @@ node_modules/
 build/
 dist/
 public/
+
+# The GitHub repository is public: keep out what is behind CERN login
+# (internal/) and the unlisted pages (dictee/, two-routes-zurich/)
+internal/
+dictee/
+two-routes-zurich/
+
+# Rebuilt from b2mm_2026/img/full (see b2mm_2026/README.md); served, not versioned
+b2mm_2026/LHCb_B0mumu_event_images.zip

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A minimal zsh · Federico Leo Redi</title>
+  <meta name="description" content="Why I threw away a convoluted shell setup for four small zsh files that work for me and for the AI agents that run commands on my machines, on macOS and Ubuntu.">
+  <meta name="author" content="Federico Leo Redi">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#ffffff">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="A minimal zsh">
+  <meta property="og:description" content="Four files, about 150 lines, and why I threw away everything else.">
+  <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
+  <link rel="alternate icon" type="image/x-icon" href="../assets/img/favicon.ico" sizes="16x16 32x32">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+  <link rel="stylesheet" href="../assets/css/plain.css">
+  <style>
+  .label { display: flex; justify-content: space-between; align-items: baseline; gap: 1em; margin: 1.4em 0 0.3em; font-size: 0.9em; color: #444; }
+  .label:first-of-type { margin-top: 0.3em; }
+  .files td:first-child { white-space: nowrap; font-family: Menlo, Consolas, "Courier New", monospace; font-size: 0.85em; }
+  .refs { list-style: none; padding-left: 0 !important; font-size: 0.9em; }
+  .refs li { overflow-wrap: anywhere; }
+  .signoff { margin-top: 1.6em !important; }
+  .colophon a.home { white-space: nowrap; }
+  @media (max-width: 480px) { .files td:first-child { white-space: normal; } }
+  </style>
+  <!-- Matomo -->
+  <script>
+    var _paq = window._paq = window._paq || [];
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+      var u="https://webanalytics.web.cern.ch/";
+      _paq.push(['setTrackerUrl', u+'matomo.php']);
+      _paq.push(['setSiteId', '1253']);
+      var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+      g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+    })();
+  </script>
+  <!-- End Matomo Code -->
+</head>
+<body>
+  <a class="skip-link" href="#why">Skip to content</a>
+
+  <div class="sheet">
+
+    <header class="masthead">
+      <div class="masthead-text">
+        <p class="trail"><a href="../">Federico Leo Redi</a></p>
+        <h1>A minimal zsh</h1>
+        <p class="standfirst">Four files, about 150 lines, and why I threw away everything else.</p>
+      </div>
+    </header>
+
+    <main>
+
+      <section id="why" aria-labelledby="why-h">
+        <h2 id="why-h">Why</h2>
+        <div class="prose">
+          <p>Last weekend I wiped my MacBook and did not restore the old setup (fish, iTerm2 tweaks, conda). Half of my commands are now run by an AI agent [0], and agents want a boring shell. Four files, and basta.</p>
+          <p>The same files now also run on my Ubuntu ThinkPad. Where the two systems differ (Homebrew, <code>ls</code> colours, where the plugins live) the files check <code>$OSTYPE</code> and do the right thing, so there is one copy to maintain, not two.</p>
+        </div>
+      </section>
+
+      <section id="idea" aria-labelledby="idea-h">
+        <h2 id="idea-h">The idea</h2>
+        <div class="prose">
+          <p>zsh reads different files depending on how it is started [1]. The trick is just to put each thing in the right one:</p>
+
+          <table class="files">
+            <thead>
+              <tr><th scope="col">File</th><th scope="col">Read by</th><th scope="col">What goes in</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>~/.zshenv</td><td>every zsh, agents included</td><td>PATH, Homebrew (if any), language, editor. Nothing else.</td></tr>
+              <tr><td>~/.zprofile</td><td>login shells (new terminal window, ssh)</td><td>macOS only: puts Homebrew back in front, because macOS moves <code>/usr/bin</code> ahead of it. Does nothing on Linux.</td></tr>
+              <tr><td>~/.zshrc</td><td>interactive shells, so humans</td><td>Completion, history, keys, prompt, aliases, two plugins.</td></tr>
+              <tr><td>~/.bash_profile</td><td>bash login shells</td><td>macOS only: one line, so agents that call bash also find Homebrew. On Ubuntu the tools are in <code>/usr/bin</code> anyway.</td></tr>
+            </tbody>
+          </table>
+
+          <p>Claude Code exports <code>CLAUDECODE=1</code> in every command it runs, so my <code>.zshrc</code> stops at line&nbsp;5 when it sees it. Other agents that run <code>zsh -c</code> do not read <code>.zshrc</code> at all. In both cases the agent gets my PATH and nothing of my taste.</p>
+        </div>
+      </section>
+
+      <section id="left-out" aria-labelledby="left-out-h">
+        <h2 id="left-out-h">Left out</h2>
+        <div class="prose">
+          <p>What is not there is more important than what is there:</p>
+          <ul>
+            <li>No framework, no plugin manager, no theme. The two plugins (autosuggestions and syntax highlighting) come from Homebrew on macOS or apt on Ubuntu, and are skipped if they are not installed.</li>
+            <li>No <code>setopt correct</code>. The &ldquo;nyae?&rdquo; prompt blocks agents and, to be honest, annoys also me.</li>
+            <li>No aliases that redefine <code>ls</code>, <code>cat</code>, <code>grep</code> or <code>rm</code>. Only new names (<code>ll</code>, <code>la</code>, <code>mkcd</code>&hellip;), so scripts and agents see the standard tools.</li>
+            <li>No Homebrew in front of the system on Linux. If linuxbrew is installed it goes at the <em>end</em> of PATH, so <code>python3</code>, <code>git</code> &amp; co. are the apt ones the agent expects.</li>
+            <li>No conda. Python lives in a <code>.venv</code> per project, managed by uv [2].</li>
+            <li>No ROOT, Geant4 or LCG views sourced at startup. They are slow and they change the environment of every single command. When I need them I type <code>rootenv</code> or <code>g4env</code>.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="files" aria-labelledby="files-h">
+        <h2 id="files-h">Files</h2>
+        <div class="prose">
+          <p>Here they are. Download them, read them (please do!), change what you don&rsquo;t like.</p>
+
+          <p class="label"><span>~/.zshenv</span><a href="zshenv" download>download</a></p>
+<pre><code># ~/.zshenv — read by EVERY zsh (login, interactive, and `zsh -c` from agents).
+# Keep it tiny: environment only. No aliases, no prompt, no plugins.
+# Works on macOS and Ubuntu.
+
+export LANG=${LANG:-en_GB.UTF-8}
+export EDITOR=vim          # change to `code -w` / `nvim` if you prefer
+export VISUAL="$EDITOR"
+export PAGER=less
+export LESS=-FRX           # quit if one screen, keep colours, don't clear
+
+# PATH as an array with no duplicates
+typeset -U path PATH
+path=("$HOME/.local/bin" $path)
+
+# Homebrew, if present: macOS (Apple Silicon or Intel) or Linux (linuxbrew)
+for _b in /opt/homebrew /usr/local /home/linuxbrew/.linuxbrew; do
+  [[ -x $_b/bin/brew ]] || continue
+  if [[ $OSTYPE == darwin* ]]; then
+    eval "$($_b/bin/brew shellenv)"          # macOS: brew tools first
+  else
+    export HOMEBREW_PREFIX=$_b               # Linux: apt tools first,
+    path=($path $_b/bin $_b/sbin)            # brew only fills the gaps
+  fi
+  break
+done
+unset _b
+export HOMEBREW_NO_ENV_HINTS=1
+
+# Do NOT source ROOT / Geant4 / LCG setup scripts here. They are slow and
+# they change the environment every agent command runs in. Use the
+# `rootenv` / `g4env` functions in ~/.zshrc instead, when you need them.</code></pre>
+
+          <p class="label"><span>~/.zprofile</span><a href="zprofile" download>download</a></p>
+<pre><code># ~/.zprofile — login shells only (Terminal.app, iTerm, ssh).
+# macOS runs /etc/zprofile -&gt; path_helper, which pushes /usr/bin ahead of
+# Homebrew. Re-assert Homebrew here so `brew` tools win. Harmless if repeated.
+# On Linux this file does nothing.
+if [[ $OSTYPE == darwin* ]]; then
+  if [[ -x /opt/homebrew/bin/brew ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  elif [[ -x /usr/local/bin/brew ]]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+  fi
+fi</code></pre>
+
+          <p class="label"><span>~/.zshrc</span><a href="zshrc" download>download</a></p>
+<pre><code># ~/.zshrc — interactive shells only. Agents running `zsh -c` never read this.
+
+# ---- Bail out early for AI agents ---------------------------------------
+# Claude Code exports CLAUDECODE=1. Anything after this line is for humans.
+[[ -n "$CLAUDECODE" ]] &amp;&amp; return
+[[ -o interactive ]] || return
+
+# ---- Completion ----------------------------------------------------------
+# Homebrew puts completions (brew, git, gh, docker, cmake, ...) here.
+# brew shellenv does NOT add this to fpath, so do it by hand, before compinit.
+# (On Ubuntu, apt packages already install theirs in the default fpath.)
+if [[ -n "$HOMEBREW_PREFIX" ]]; then
+  fpath=("$HOMEBREW_PREFIX/share/zsh/site-functions" $fpath)
+fi
+setopt extended_glob            # needed for the (#q...) qualifier below
+autoload -Uz compinit
+# Rebuild the dump once a day, otherwise use the cache (fast startup)
+if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
+  compinit
+else
+  compinit -C
+fi
+zstyle ':completion:*' menu select                       # arrow-key menu
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # case-insensitive
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f'
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path "$HOME/.cache/zsh/compcache"
+mkdir -p "$HOME/.cache/zsh"
+
+# ---- History -------------------------------------------------------------
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=100000
+SAVEHIST=100000
+setopt extended_history        # timestamps
+setopt hist_ignore_all_dups    # drop older duplicates
+setopt hist_ignore_space       # " cmd" is not recorded
+setopt hist_reduce_blanks
+setopt share_history           # shared across open terminals
+setopt inc_append_history
+
+# ---- Options -------------------------------------------------------------
+setopt auto_cd                 # type a directory name to cd into it
+setopt auto_pushd pushd_ignore_dups pushd_silent
+setopt interactive_comments    # allow # comments on the command line
+setopt no_beep
+setopt extended_glob
+# Deliberately NOT set: correct / correct_all (the "nyae?" prompt hangs agents
+# and annoys humans), noclobber, rm_star_silent tricks.
+
+# ---- Keys ----------------------------------------------------------------
+bindkey -e                                       # emacs keys (vanilla)
+autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey '^[[A' up-line-or-beginning-search       # Up: history matching prefix
+bindkey '^[[B' down-line-or-beginning-search     # Down
+bindkey '^[[1;3C' forward-word                   # Alt+Right
+bindkey '^[[1;3D' backward-word                  # Alt+Left
+bindkey '^[[3~' delete-char                      # Fn+Delete
+
+# ---- Aliases (additive only: never redefine ls, cat, grep, rm, ...) ------
+if [[ $OSTYPE == darwin* ]]; then
+  export CLICOLOR=1; _c=''                       # colour for BSD ls
+else
+  eval "$(dircolors -b)"; _c=' --color=auto'     # colour for GNU ls
+fi
+alias ll="ls -lhF$_c"
+alias la="ls -lahF$_c"
+alias l="ls -F$_c"
+unset _c
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias -- -='cd -'
+alias md='mkdir -p'
+alias path='print -l $path'
+(( $+commands[brew] )) &amp;&amp; alias brewup='brew update &amp;&amp; brew upgrade &amp;&amp; brew cleanup'
+[[ -r /etc/debian_version ]] &amp;&amp; alias aptup='sudo apt update &amp;&amp; sudo apt full-upgrade -y &amp;&amp; sudo apt autoremove -y'
+mkcd() { mkdir -p "$1" &amp;&amp; cd "$1"; }
+
+# HEP environments, on demand only (edit the paths to match your installs)
+rootenv() { source "${1:-$HOMEBREW_PREFIX}/bin/thisroot.sh" &amp;&amp; echo "ROOT $(root-config --version)"; }
+g4env()   { source "${1:-$HOMEBREW_PREFIX}/bin/geant4.sh"  &amp;&amp; echo "Geant4 ready"; }
+
+# ---- Prompt (single line, git branch, nothing on the right) --------------
+autoload -Uz vcs_info
+zstyle ':vcs_info:git:*' formats ' %F{magenta}%b%f%c%u'
+zstyle ':vcs_info:git:*' actionformats ' %F{magenta}%b|%a%f'
+zstyle ':vcs_info:git:*' check-for-changes true
+zstyle ':vcs_info:git:*' stagedstr '%F{green}+%f'
+zstyle ':vcs_info:git:*' unstagedstr '%F{red}*%f'
+precmd() { vcs_info }
+setopt prompt_subst
+PROMPT='%F{cyan}%1~%f${vcs_info_msg_0_} %(?.%F{green}.%F{red})%#%f '
+
+# ---- Optional plugins (purely visual, skipped if absent) ----------------
+# macOS:  brew install zsh-autosuggestions zsh-syntax-highlighting
+# Ubuntu: sudo apt install zsh-autosuggestions zsh-syntax-highlighting
+for _d in "$HOMEBREW_PREFIX/share" /usr/share; do
+  [[ -r $_d/zsh-autosuggestions/zsh-autosuggestions.zsh ]] || continue
+  source $_d/zsh-autosuggestions/zsh-autosuggestions.zsh; break
+done
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+# syntax highlighting must be sourced LAST
+for _d in "$HOMEBREW_PREFIX/share" /usr/share; do
+  [[ -r $_d/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] || continue
+  source $_d/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh; break
+done
+unset _d
+
+# ---- Machine-local extras (not in git) ----------------------------------
+[[ -r "$HOME/.zshrc.local" ]] &amp;&amp; source "$HOME/.zshrc.local"</code></pre>
+
+          <p class="label"><span>install.sh</span><a href="install.sh" download>download</a></p>
+<pre><code>#!/bin/sh
+# One-shot install for macOS or Ubuntu. Backs up anything it overwrites.
+# Run with plain sh: on a fresh Ubuntu zsh is not there yet.
+set -e
+cd "$(dirname "$0")"
+case "$(uname)" in
+  Darwin)
+    # zsh and vim ship with macOS; plugins are optional eye candy
+    if command -v brew &gt;/dev/null; then
+      brew install zsh-autosuggestions zsh-syntax-highlighting
+      # make Homebrew visible to agents that use bash (Claude Code often does)
+      grep -q 'brew shellenv' "$HOME/.bash_profile" 2&gt;/dev/null ||
+        echo "eval \"\$($(command -v brew) shellenv)\"" &gt;&gt; "$HOME/.bash_profile"
+    fi ;;
+  Linux)
+    sudo apt-get install -y zsh vim zsh-autosuggestions zsh-syntax-highlighting
+    [ "$(getent passwd "$USER" | cut -d: -f7)" = /usr/bin/zsh ] ||
+      chsh -s /usr/bin/zsh ;;
+esac
+for f in zshenv zprofile zshrc; do
+  [ -e "$HOME/.$f" ] &amp;&amp; mv "$HOME/.$f" "$HOME/.$f.bak.$(date +%Y%m%d%H%M%S)"
+  cp "$f" "$HOME/.$f"
+done
+# refresh completion cache
+rm -f "$HOME/.zcompdump"*
+echo "Done. Log out and in (Linux) or open a new terminal, or: exec zsh"</code></pre>
+        </div>
+      </section>
+
+      <section id="install" aria-labelledby="install-h">
+        <h2 id="install-h">Install</h2>
+        <div class="prose">
+<pre><code>mkdir minimal-zsh &amp;&amp; cd minimal-zsh
+for f in zshenv zprofile zshrc install.sh; do
+  curl -fsSLO https://fredi.web.cern.ch/zsh/$f
+done
+less zshrc          # read before running, always
+sh install.sh        # plain sh: on a fresh Ubuntu zsh is not there yet</code></pre>
+
+          <p>The script makes a backup of every file it overwrites (<code>.zshrc.bak.&lt;date&gt;</code>). On macOS it installs the two plugins if you have Homebrew and adds one line to <code>.bash_profile</code>. On Ubuntu it asks for your password once, installs <code>zsh</code>, <code>vim</code> and the two plugins with apt, and makes zsh your login shell with <code>chsh</code>.</p>
+
+          <p>Then open a new terminal (on Ubuntu, log out and back in first, so the new login shell takes effect). On a Mac <code>which brew</code> should print <code>/opt/homebrew/bin/brew</code>; on Ubuntu <code>echo $SHELL</code> should print <code>/usr/bin/zsh</code>. Inside Claude Code, <code>echo $CLAUDECODE</code> should print <code>1</code>. Anything machine-specific goes in <code>~/.zshrc.local</code>, which is read at the end if it exists.</p>
+
+          <p><strong>Optional: fingerprint for <code>sudo</code> only.</strong> An agent cannot type your password, but you can touch a sensor. If you allow fingerprint for <code>sudo</code>, you can run a <code>sudo</code> command from the agent&rsquo;s prompt (in Claude Code: <code>! sudo &hellip;</code>) and confirm it with a finger. I keep it <em>off</em> for the login and lock screens: at login you need the password anyway to unlock the keyring, and on my ThinkPad the reader there mostly gets in the way.</p>
+
+          <p>On Ubuntu (needs <code>fprintd</code> and an enrolled finger, <code>fprintd-enroll</code>):</p>
+<pre><code># 1. remove fingerprint from the shared stack (login, lock screen, su, ...)
+sudo pam-auth-update --disable fprintd
+# 2. add it back for sudo only: finger first, password as fallback
+sudo sed -i 's/^@include common-auth/auth\tsufficient\tpam_fprintd.so max-tries=3 timeout=10\n&amp;/' /etc/pam.d/sudo
+# 3. hide the fingerprint option on the GDM login screen
+[ -f /etc/dconf/profile/gdm ] || printf 'user-db:user\nsystem-db:gdm\nfile-db:/usr/share/gdm/greeter-dconf-defaults\n' | sudo tee /etc/dconf/profile/gdm
+sudo mkdir -p /etc/dconf/db/gdm.d
+printf '[org/gnome/login-screen]\nenable-fingerprint-authentication=false\n' | sudo tee /etc/dconf/db/gdm.d/90-no-fingerprint
+sudo dconf update</code></pre>
+
+          <p>Keep a root shell open (<code>sudo -i</code>) while you edit PAM files, in case you lock yourself out. On a Mac the same idea is one line, and only for <code>sudo</code> by design: <code>sed 's/^#auth/auth/' /etc/pam.d/sudo_local.template | sudo tee /etc/pam.d/sudo_local</code> enables Touch ID.</p>
+
+          <p>One catch: commands run from an agent have no terminal, and <code>sudo</code> refuses to authenticate without one (&ldquo;a terminal is required&rdquo;), before the fingerprint module is even asked. The fix is to give it a fake terminal with <code>script</code>. I keep this as a tiny <code>~/.local/bin/fsudo</code>, and then <code>! fsudo apt upgrade</code> just asks for a finger:</p>
+<pre><code>#!/bin/bash
+# fsudo — sudo for places without a terminal (Claude Code's `!`, agents).
+exec script -qec "sudo $(printf '%q ' "$@")" /dev/null</code></pre>
+          <p>(That is the Linux <code>script</code>; on macOS the syntax is <code>script -q /dev/null sudo &hellip;</code>.)</p>
+          <p>Tested on the ThinkPad (Ubuntu, 8 November 2026): <code>! fsudo apt upgrade</code> typed into Claude Code showed &ldquo;Place your right index finger on the fingerprint reader&rdquo;, one touch, and apt ran as root. Because apt now thinks it has a terminal it prints its progress counters, which pile up as noise in the agent&rsquo;s output; <code>fsudo apt-get -q &hellip;</code> is quieter. And remember that <code>apt upgrade</code> alone does not refresh the package lists: run <code>apt update</code> first.</p>
+
+          <ul class="refs">
+            <li>[0] <a href="https://claude.com/claude-code" rel="external">https://claude.com/claude-code</a></li>
+            <li>[1] <a href="https://zsh.sourceforge.io/Intro/intro_3.html" rel="external">https://zsh.sourceforge.io/Intro/intro_3.html</a></li>
+            <li>[2] <a href="https://docs.astral.sh/uv/" rel="external">https://docs.astral.sh/uv/</a></li>
+          </ul>
+
+          <p class="signoff">Cheers,<br>Fede</p>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="colophon">
+      <p>Written by Federico Leo Redi, 5 November 2026, for an Apple Silicon MacBook; updated 8 November 2026 for Ubuntu. It works for me; use it at your own risk. <a class="home" href="../">Back to the home page</a>.</p>
+    </footer>
+
+  </div>
+</body>
+</html>

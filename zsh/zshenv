@@ -1,0 +1,31 @@
+# ~/.zshenv — read by EVERY zsh (login, interactive, and `zsh -c` from agents).
+# Keep it tiny: environment only. No aliases, no prompt, no plugins.
+# Works on macOS and Ubuntu.
+
+export LANG=${LANG:-en_GB.UTF-8}
+export EDITOR=vim          # change to `code -w` / `nvim` if you prefer
+export VISUAL="$EDITOR"
+export PAGER=less
+export LESS=-FRX           # quit if one screen, keep colours, don't clear
+
+# PATH as an array with no duplicates
+typeset -U path PATH
+path=("$HOME/.local/bin" $path)
+
+# Homebrew, if present: macOS (Apple Silicon or Intel) or Linux (linuxbrew)
+for _b in /opt/homebrew /usr/local /home/linuxbrew/.linuxbrew; do
+  [[ -x $_b/bin/brew ]] || continue
+  if [[ $OSTYPE == darwin* ]]; then
+    eval "$($_b/bin/brew shellenv)"          # macOS: brew tools first
+  else
+    export HOMEBREW_PREFIX=$_b               # Linux: apt tools first,
+    path=($path $_b/bin $_b/sbin)            # brew only fills the gaps
+  fi
+  break
+done
+unset _b
+export HOMEBREW_NO_ENV_HINTS=1
+
+# Do NOT source ROOT / Geant4 / LCG setup scripts here. They are slow and
+# they change the environment every agent command runs in. Use the
+# `rootenv` / `g4env` functions in ~/.zshrc instead, when you need them.

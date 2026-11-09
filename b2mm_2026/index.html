@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>B⁰→μ⁺μ⁻ event images · Federico Leo Redi</title>
+  <meta name="description" content="Full-resolution 3D renders of real LHCb B⁰→μ⁺μ⁻ candidates and one labelled simulation, with captions and credit, for outreach and press.">
+  <meta name="author" content="Federico Leo Redi">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#ffffff">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="B⁰→μ⁺μ⁻ event images">
+  <meta property="og:description" content="3D renders of real LHCb B⁰→μ⁺μ⁻ candidates, 6000 × 4000 px, with captions and credit.">
+  <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
+  <link rel="alternate icon" type="image/x-icon" href="../assets/img/favicon.ico" sizes="16x16 32x32">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+  <link rel="stylesheet" href="../assets/css/plain.css">
+  <style>
+  :root { --mu: #ff2a6d; --track: #4fb3ff; --ecal: #ffa53a; --hcal: #39d0b5; --det: #6f8fb8; } /* colours of the renders, for the key */
+
+  .nw { white-space: nowrap; }
+  .trail span { margin: 0 0.45em; }
+  .elsewhere .meta { color: #444; }
+
+  .textbtn { appearance: none; margin: 0; padding: 0; border: 0; background: none; cursor: pointer; font: inherit; font-size: 0.9em; color: #0645ad; text-decoration: underline; }
+  .textbtn:focus-visible, .stage:focus-visible, .variant:focus-visible { outline: 2px solid #0645ad; outline-offset: 2px; }
+  .status { font-size: 0.9em; color: #444; margin-left: 0.6em; }
+  .status.warn { color: #a00; }
+  .label { display: block; margin: 0 0 0.3em; font-size: 0.9em; color: #444; }
+  .credit code { margin-right: 0.8em; }
+
+  /* ---- Events: a plate, then its record ---------------------------------- */
+  .event { padding: 1.8em 0; border-bottom: 1px solid #ccc; }
+  .plate { margin: 0 0 1.4em; }
+  .stage { position: relative; display: block; aspect-ratio: 3 / 2; background: #000; border: 1px solid #ccc; cursor: zoom-in; }
+  .stage img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .zoomhint { position: absolute; right: 0.6em; bottom: 0.6em; padding: 0.1em 0.5em; background: #fff; border: 1px solid #ccc; font-size: 0.8em; color: #333; opacity: 0.9; }
+
+  .variants { display: flex; flex-wrap: wrap; gap: 0.6em 1em; margin-top: 0.8em; }
+  .variant { appearance: none; width: 8.5em; margin: 0; padding: 0; border: 0; background: none; cursor: pointer; text-align: left; font: inherit; font-size: 0.8em; line-height: 1.4; color: #444; }
+  .variant img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; margin-bottom: 0.3em; border: 1px solid #ccc; opacity: 0.75; }
+  .variant:hover img, .variant[aria-pressed="true"] img { opacity: 1; }
+  .variant[aria-pressed="true"] { color: #000; }
+  .variant[aria-pressed="true"] img { outline: 2px solid #0645ad; outline-offset: 1px; }
+
+  .entry-head h3 { margin: 0 0 0.3em; }
+  .tags { display: flex; flex-wrap: wrap; gap: 0 0.9em; margin: 0 0 0.8em; padding: 0; list-style: none; font-size: 0.9em; font-style: italic; color: #444; }
+  .tags .rec, .tags .sim { color: #a00; }
+
+  .facts { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 0.1em 1.2em; margin: 0 0 1em; }
+  .facts dt { color: #444; }
+  .facts dd { margin: 0; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+  .drawn { color: #333; }
+
+  .caption { margin: 1.2em 0; padding-left: 1em; border-left: 3px solid #ccc; }
+  .caption .captext { margin-bottom: 0.5em; }
+
+  .prose .dls { margin: 0; padding: 0; list-style: none; }
+  .dls li { margin: 0 0 0.2em; }
+  .dl::before { content: "\2193 "; color: #444; }
+  .dl-meta { margin-left: 0.6em; font-size: 0.9em; color: #444; }
+  .dl.current .dl-name { font-weight: bold; }
+
+  .simnote { margin: 0 0 1em; padding: 0.5em 0.9em; border: 1px solid #a00; }
+  .simnote strong { color: #a00; }
+
+  /* ---- Key to the colours ------------------------------------------------ */
+  .prose .key { margin: 0; padding: 0; list-style: none; }
+  .key li { display: grid; grid-template-columns: 2em minmax(0, 1fr); column-gap: 0.9em; margin: 0 0 0.5em; }
+  .swatch { display: block; height: 0.35em; margin-top: 0.65em; }
+
+  /* ---- Enlarged view ---------------------------------------------------- */
+  dialog.lightbox { border: 0; padding: 0; width: 100%; max-width: min(96vw, 1800px); background: transparent; color: #000; }
+  dialog.lightbox::backdrop { background: rgba(255, 255, 255, 0.97); }
+  .lb img { display: block; width: auto; height: auto; max-width: 100%; max-height: calc(100vh - 6em); margin: 0 auto; background: #000; border: 1px solid #ccc; }
+  .lb .bar { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.4em 1.5em; padding-top: 0.7em; }
+  .lb h4 { margin: 0; font-size: 1em; font-weight: normal; }
+  .lb .acts { display: flex; gap: 1.5em; }
+
+  .colophon a.home { white-space: nowrap; }
+
+  @media (max-width: 480px) { .variant { width: calc((100% - 2em) / 3); } }
+  @media print {
+    .variants, .zoomhint, .textbtn, .status, .trail, dialog { display: none; }
+    .event { page-break-inside: avoid; }
+  }
+  </style>
+  <!-- Matomo -->
+  <script>
+    var _paq = window._paq = window._paq || [];
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+      var u="https://webanalytics.web.cern.ch/";
+      _paq.push(['setTrackerUrl', u+'matomo.php']);
+      _paq.push(['setSiteId', '1253']);
+      var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+      g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+    })();
+  </script>
+  <!-- End Matomo Code -->
+</head>
+<body>
+  <a class="skip-link" href="#about">Skip to content</a>
+
+  <div class="sheet">
+
+    <header class="masthead">
+      <div class="masthead-text">
+        <p class="trail"><a href="../">Federico Leo Redi</a><span aria-hidden="true">/</span><a href="../#outreach">Outreach</a></p>
+        <h1><span class="nw">B<sup>0</sup> → μ<sup>+</sup>μ<sup>−</sup></span> event images</h1>
+        <p class="standfirst">Renders of real LHCb candidates, with captions and credit, for outreach and press.</p>
+      </div>
+    </header>
+
+    <ul class="elsewhere">
+      <li><a href="LHCb_B0mumu_event_images.zip" download>Download all images</a> <span class="meta">ZIP · 11 files · 33 MB</span></li>
+      <li><a href="#real">Real candidates</a></li>
+      <li><a href="#simulation">Simulation</a></li>
+      <li><a href="#colours">Colours</a></li>
+      <li><a href="#provenance">Provenance</a></li>
+    </ul>
+
+    <main>
+
+      <section id="about" aria-labelledby="about-h">
+        <h2 id="about-h">About</h2>
+        <div class="prose">
+          <p>Three-dimensional renders of real <span class="nw">B<sup>0</sup> → μ<sup>+</sup>μ<sup>−</sup></span> candidates recorded by LHCb in 2024 and 2025, plus one clearly labelled simulation. Every element is placed from the recorded data and the official detector geometry; no image generation is involved.</p>
+          <p>All files are 6000&thinsp;×&thinsp;4000 pixels at 300&nbsp;dpi, suitable for print. Please credit them as:</p>
+          <p class="credit"><code id="credit-text">LHCb Collaboration / Federico Leo Redi</code><button class="textbtn" type="button" id="copy-credit">Copy credit</button><span class="status" id="credit-status" aria-live="polite"></span></p>
+        </div>
+      </section>
+
+      <section id="real" aria-labelledby="real-h">
+        <h2 id="real-h">Real candidates</h2>
+        <div class="prose">
+          <p>Each event passes the <span class="nw">B<sup>0</sup> → μ<sup>+</sup>μ<sup>−</sup></span> analysis selection. A single candidate can still be background, so call it a <em>candidate</em> decay. Each comes in three versions: without text, with a labelled close-up of the collision point, and on a white background.</p>
+        </div>
+      </section>
+
+      <article class="event" id="c5" aria-labelledby="c5-h">
+        <figure class="plate">
+          <a class="stage" href="img/view/c5.jpg" data-title="Candidate C5" aria-label="Enlarge Candidate C5">
+            <img src="img/view/c5.jpg" alt="Candidate C5, without text" width="2400" height="1600">
+            <span class="zoomhint">Enlarge</span>
+          </a>
+          <div class="variants" role="group" aria-label="Versions of Candidate C5">
+          <button class="variant" type="button" aria-pressed="true" data-img="c5" data-label="Without text"><img src="img/thumb/c5.jpg" alt="" loading="lazy" width="1200" height="800">Without text</button>
+          <button class="variant" type="button" aria-pressed="false" data-img="c5-zoom" data-label="With vertex close-up"><img src="img/thumb/c5-zoom.jpg" alt="" loading="lazy" width="1200" height="800">With vertex close-up</button>
+          <button class="variant" type="button" aria-pressed="false" data-img="c5-white" data-label="White background"><img src="img/thumb/c5-white.jpg" alt="" loading="lazy" width="1200" height="800">White background</button>
+          </div>
+        </figure>
+        <div class="entry">
+          <div class="entry-head">
+            <h3 id="c5-h">Candidate C5</h3>
+            <ul class="tags"><li class="rec">Recommended</li><li>Real data</li><li>2025 data</li><li>Real calorimeter cells</li></ul>
+          </div>
+          <div class="prose">
+            <dl class="facts">
+              <dt>Run</dt><dd>332869</dd>
+              <dt>Event</dt><dd>64344859789</dd>
+              <dt>Recorded</dt><dd>3 Nov 2025, 10:12 GMT</dd>
+              <dt>m(μ<sup>+</sup>μ<sup>−</sup>)</dt><dd>5255.2 MeV</dd>
+              <dt>B<sup>0</sup> flight</dt><dd>10.4 mm</dd>
+              <dt>B<sup>0</sup> momentum</dt><dd>52.5 GeV (7.8 GeV transverse)</dd>
+              <dt>B<sup>0</sup> decay time</dt><dd>3.5 ps</dd>
+              <dt>μ opening angle</dt><dd>11.6°</dd>
+            </dl>
+            <p class="drawn">Drawn from the data: the two muons and their chamber pads, the other tracks, energy in both calorimeters and all 424 muon-chamber hits of the event.</p>
+            <div class="caption">
+              <span class="label">Suggested caption</span>
+              <p class="captext" data-copy="A candidate B⁰ → μ⁺μ⁻ decay recorded by the LHCb experiment in November 2025. The B⁰ meson travels about 1 cm before decaying into two muons (pink), which cross the whole detector. Blue lines are other particles produced in the same proton–proton collision; amber and teal show energy deposited in the calorimeters.">A candidate <span class="nw">B<sup>0</sup> → μ<sup>+</sup>μ<sup>−</sup></span> decay recorded by the LHCb experiment in November 2025. The B<sup>0</sup> meson travels about 1 cm before decaying into two muons (pink), which cross the whole detector. Blue lines are other particles produced in the same proton–proton collision; amber and teal show energy deposited in the calorimeters.</p>
+              <p><button class="textbtn copy" type="button">Copy caption</button><span class="status" aria-live="polite"></span></p>
+            </div>
+            <span class="label">Download · 6000 × 4000 px · 300 dpi</span>
+            <ul class="dls">
+              <li><a class="dl current" data-img="c5" href="img/full/LHCb_B0mumu_candidate_C5_run332869_6000x4000.jpg" download><span class="dl-name">Without text</span><span class="dl-meta">JPEG · 2.9 MB</span></a></li>
+              <li><a class="dl" data-img="c5-zoom" href="img/full/LHCb_B0mumu_candidate_C5_run332869_vertex_closeup_6000x4000.jpg" download><span class="dl-name">With vertex close-up</span><span class="dl-meta">JPEG · 3.6 MB</span></a></li>
+              <li><a class="dl" data-img="c5-white" href="img/full/LHCb_B0mumu_candidate_C5_run332869_white_6000x4000.jpg" download><span class="dl-name">White background</span><span class="dl-meta">JPEG · 2.4 MB</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </article>
+      <article class="event" id="c3" aria-labelledby="c3-h">
+        <figure class="plate">
+          <a class="stage" href="img/view/c3.jpg" data-title="Candidate C3" aria-label="Enlarge Candidate C3">
+            <img src="img/view/c3.jpg" alt="Candidate C3, without text" width="2400" height="1600" loading="lazy">
+            <span class="zoomhint">Enlarge</span>
+          </a>
+          <div class="variants" role="group" aria-label="Versions of Candidate C3">
+          <button class="variant" type="button" aria-pressed="true" data-img="c3" data-label="Without text"><img src="img/thumb/c3.jpg" alt="" loading="lazy" width="1200" height="800">Without text</button>
+          <button class="variant" type="button" aria-pressed="false" data-img="c3-zoom" data-label="With vertex close-up"><img src="img/thumb/c3-zoom.jpg" alt="" loading="lazy" width="1200" height="800">With vertex close-up</button>
+          <button class="variant" type="button" aria-pressed="false" data-img="c3-white" data-label="White background"><img src="img/thumb/c3-white.jpg" alt="" loading="lazy" width="1200" height="800">White background</button>
+          </div>
+        </figure>
+        <div class="entry">
+          <div class="entry-head">
+            <h3 id="c3-h">Candidate C3</h3>
+            <ul class="tags"><li>Real data</li><li>2024 data</li><li>Widest muon opening</li></ul>
+          </div>
+          <div class="prose">
+            <dl class="facts">
+              <dt>Run</dt><dd>302433</dd>
+              <dt>Event</dt><dd>6948609257</dd>
+              <dt>Recorded</dt><dd>29 Jul 2024, 17:20 GMT</dd>
+              <dt>m(μ<sup>+</sup>μ<sup>−</sup>)</dt><dd>5285.9 MeV</dd>
+              <dt>B<sup>0</sup> flight</dt><dd>12.6 mm</dd>
+              <dt>B<sup>0</sup> momentum</dt><dd>56.8 GeV (7.0 GeV transverse)</dd>
+              <dt>B<sup>0</sup> decay time</dt><dd>3.9 ps</dd>
+              <dt>μ opening angle</dt><dd>13.2°</dd>
+            </dl>
+            <p class="drawn">Drawn from the data: the two muons and their chamber pads, the other tracks and the electromagnetic-calorimeter clusters reconstructed by the trigger.</p>
+            <div class="caption">
+              <span class="label">Suggested caption</span>
+              <p class="captext" data-copy="A candidate B⁰ → μ⁺μ⁻ decay recorded by the LHCb experiment in July 2024. The B⁰ meson travels about 1.3 cm before decaying into two muons (pink), which cross the whole detector. Blue lines are other particles produced in the same proton–proton collision; amber shows energy in the electromagnetic calorimeter.">A candidate <span class="nw">B<sup>0</sup> → μ<sup>+</sup>μ<sup>−</sup></span> decay recorded by the LHCb experiment in July 2024. The B<sup>0</sup> meson travels about 1.3 cm before decaying into two muons (pink), which cross the whole detector. Blue lines are other particles produced in the same proton–proton collision; amber shows energy in the electromagnetic calorimeter.</p>
+              <p><button class="textbtn copy" type="button">Copy caption</button><span class="status" aria-live="polite"></span></p>
+            </div>
+            <span class="label">Download · 6000 × 4000 px · 300 dpi</span>
+            <ul class="dls">
+              <li><a class="dl current" data-img="c3" href="img/full/LHCb_B0mumu_candidate_C3_run302433_6000x4000.jpg" download><span class="dl-name">Without text</span><span class="dl-meta">JPEG · 2.7 MB</span></a></li>
+              <li><a class="dl" data-img="c3-zoom" href="img/full/LHCb_B0mumu_candidate_C3_run302433_vertex_closeup_6000x4000.jpg" download><span class="dl-name">With vertex close-up</span><span class="dl-meta">JPEG · 3.2 MB</span></a></li>
+              <li><a class="dl" data-img="c3-white" href="img/full/LHCb_B0mumu_candidate_C3_run302433_white_6000x4000.jpg" download><span class="dl-name">White background</span><span class="dl-meta">JPEG · 2.2 MB</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </article>
+      <article class="event" id="c4" aria-labelledby="c4-h">
+        <figure class="plate">
+          <a class="stage" href="img/view/c4.jpg" data-title="Candidate C4" aria-label="Enlarge Candidate C4">
+            <img src="img/view/c4.jpg" alt="Candidate C4, without text" width="2400" height="1600" loading="lazy">
+            <span class="zoomhint">Enlarge</span>
+          </a>
+          <div class="variants" role="group" aria-label="Versions of Candidate C4">
+          <button class="variant" type="button" aria-pressed="true" data-img="c4" data-label="Without text"><img src="img/thumb/c4.jpg" alt="" loading="lazy" width="1200" height="800">Without text</button>
+          <button class="variant" type="button" aria-pressed="false" data-img="c4-zoom" data-label="With vertex close-up"><img src="img/thumb/c4-zoom.jpg" alt="" loading="lazy" width="1200" height="800">With vertex close-up</button>
+          <button class="variant" type="button" aria-pressed="false" data-img="c4-white" data-label="White background"><img src="img/thumb/c4-white.jpg" alt="" loading="lazy" width="1200" height="800">White background</button>
+          </div>
+        </figure>
+        <div class="entry">
+          <div class="entry-head">
+            <h3 id="c4-h">Candidate C4</h3>
+            <ul class="tags"><li>Real data</li><li>2024 data</li></ul>
+          </div>
+          <div class="prose">
+            <dl class="facts">
+              <dt>Run</dt><dd>308388</dd>
+              <dt>Event</dt><dd>64182699450</dd>
+              <dt>Recorded</dt><dd>13 Oct 2024, 21:51 GMT</dd>
+              <dt>m(μ<sup>+</sup>μ<sup>−</sup>)</dt><dd>5276.2 MeV</dd>
+              <dt>B<sup>0</sup> flight</dt><dd>4.6 mm</dd>
+              <dt>B<sup>0</sup> momentum</dt><dd>57.8 GeV (11.6 GeV transverse)</dd>
+              <dt>B<sup>0</sup> decay time</dt><dd>1.4 ps</dd>
+              <dt>μ opening angle</dt><dd>12.5°</dd>
+            </dl>
+            <p class="drawn">Drawn from the data: the two muons and their chamber pads, the other tracks and the electromagnetic-calorimeter clusters reconstructed by the trigger.</p>
+            <div class="caption">
+              <span class="label">Suggested caption</span>
+              <p class="captext" data-copy="A candidate B⁰ → μ⁺μ⁻ decay recorded by the LHCb experiment in October 2024. The B⁰ meson travels about 5 mm before decaying into two muons (pink), which cross the whole detector. Blue lines are other particles produced in the same proton–proton collision; amber shows energy in the electromagnetic calorimeter.">A candidate <span class="nw">B<sup>0</sup> → μ<sup>+</sup>μ<sup>−</sup></span> decay recorded by the LHCb experiment in October 2024. The B<sup>0</sup> meson travels about 5 mm before decaying into two muons (pink), which cross the whole detector. Blue lines are other particles produced in the same proton–proton collision; amber shows energy in the electromagnetic calorimeter.</p>
+              <p><button class="textbtn copy" type="button">Copy caption</button><span class="status" aria-live="polite"></span></p>
+            </div>
+            <span class="label">Download · 6000 × 4000 px · 300 dpi</span>
+            <ul class="dls">
+              <li><a class="dl current" data-img="c4" href="img/full/LHCb_B0mumu_candidate_C4_run308388_6000x4000.jpg" download><span class="dl-name">Without text</span><span class="dl-meta">JPEG · 3.0 MB</span></a></li>
+              <li><a class="dl" data-img="c4-zoom" href="img/full/LHCb_B0mumu_candidate_C4_run308388_vertex_closeup_6000x4000.jpg" download><span class="dl-name">With vertex close-up</span><span class="dl-meta">JPEG · 3.6 MB</span></a></li>
+              <li><a class="dl" data-img="c4-white" href="img/full/LHCb_B0mumu_candidate_C4_run308388_white_6000x4000.jpg" download><span class="dl-name">White background</span><span class="dl-meta">JPEG · 2.4 MB</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <section id="simulation" aria-labelledby="simulation-h">
+        <h2 id="simulation-h">Simulation</h2>
+        <div class="prose">
+          <p>A simulated <span class="nw">B<sup>0</sup> → μ<sup>+</sup>μ<sup>−</sup></span> decay drawn into a real collision. Use it only as an illustration, with a caption that says so.</p>
+        </div>
+      </section>
+
+      <article class="event" id="sim" aria-labelledby="sim-h">
+        <figure class="plate">
+          <a class="stage" href="img/view/sim.jpg" data-title="Simulated B⁰ → μ⁺μ⁻ decay" aria-label="Enlarge Simulated B⁰ → μ⁺μ⁻ decay">
+            <img src="img/view/sim.jpg" alt="Simulated B⁰ → μ⁺μ⁻ decay, without text" width="2400" height="1600" loading="lazy">
+            <span class="zoomhint">Enlarge</span>
+          </a>
+          <div class="variants" role="group" aria-label="Versions of Simulated B⁰ → μ⁺μ⁻ decay">
+          <button class="variant" type="button" aria-pressed="true" data-img="sim" data-label="Without text"><img src="img/thumb/sim.jpg" alt="" loading="lazy" width="1200" height="800">Without text</button>
+          <button class="variant" type="button" aria-pressed="false" data-img="sim-labelled" data-label="Labelled, with close-up"><img src="img/thumb/sim-labelled.jpg" alt="" loading="lazy" width="1200" height="800">Labelled, with close-up</button>
+          </div>
+        </figure>
+        <div class="entry">
+          <div class="entry-head">
+            <h3 id="sim-h">Simulated <span class="nw">B<sup>0</sup> → μ<sup>+</sup>μ<sup>−</sup></span> decay</h3>
+            <ul class="tags"><li class="sim">Not a recorded decay</li></ul>
+          </div>
+          <div class="prose">
+            <dl class="facts">
+              <dt>Collision</dt><dd>Run 350489, June 2026</dd>
+              <dt>Simulated</dt><dd><span class="nw">B<sup>0</sup> → μ<sup>+</sup>μ<sup>−</sup></span> decay</dd>
+              <dt>B<sup>0</sup> flight</dt><dd>8.5 mm</dd>
+            </dl>
+            <p class="simnote"><strong>Simulation.</strong> The caption must say this is a visualisation, not a recorded B<sup>0</sup> decay.</p>
+            <p class="drawn">The two pink muons are simulated, with the correct B<sup>0</sup> mass and kinematics, and bent in the magnetic field. Everything else is a real collision from the LHCb live event display.</p>
+            <div class="caption">
+              <span class="label">Suggested caption</span>
+              <p class="captext" data-copy="Visualisation of a B⁰ → μ⁺μ⁻ decay in the LHCb detector. The decay is simulated; the other particles come from a real proton–proton collision recorded by LHCb in 2026.">Visualisation of a <span class="nw">B<sup>0</sup> → μ<sup>+</sup>μ<sup>−</sup></span> decay in the LHCb detector. The decay is simulated; the other particles come from a real proton–proton collision recorded by LHCb in 2026.</p>
+              <p><button class="textbtn copy" type="button">Copy caption</button><span class="status" aria-live="polite"></span></p>
+            </div>
+            <span class="label">Download · 6000 × 4000 px · 300 dpi</span>
+            <ul class="dls">
+              <li><a class="dl current" data-img="sim" href="img/full/B0mumu_SIMULATED_illustration_6000x4000.jpg" download><span class="dl-name">Without text</span><span class="dl-meta">JPEG · 3.0 MB</span></a></li>
+              <li><a class="dl" data-img="sim-labelled" href="img/full/B0mumu_SIMULATED_illustration_labelled_6000x4000.jpg" download><span class="dl-name">Labelled, with close-up</span><span class="dl-meta">JPEG · 3.7 MB</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <section id="colours" aria-labelledby="colours-h">
+        <h2 id="colours-h">Colours</h2>
+        <div class="prose">
+          <ul class="key">
+            <li><i class="swatch" style="background: var(--mu)"></i><span><b>Pink.</b> The two muons from the B<sup>0</sup> decay, and the muon-chamber pads they hit.</span></li>
+            <li><i class="swatch" style="background: var(--track)"></i><span><b>Blue.</b> Other charged particles from the same proton–proton collision.</span></li>
+            <li><i class="swatch" style="background: var(--ecal)"></i><span><b>Amber.</b> Energy in the electromagnetic calorimeter.</span></li>
+            <li><i class="swatch" style="background: var(--hcal)"></i><span><b>Teal.</b> Energy in the hadronic calorimeter and hits in the muon chambers (2025 event).</span></li>
+            <li><i class="swatch" style="background: var(--det)"></i><span><b>Faint outlines.</b> The LHCb detector, drawn lightly so the muons stand out.</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="provenance" aria-labelledby="provenance-h">
+        <h2 id="provenance-h">Provenance</h2>
+        <div class="prose">
+          <h3>Data</h3>
+          <ul>
+            <li>Candidates and muon track states come from the <span class="nw">B<sup>0</sup> → μ<sup>+</sup>μ<sup>−</sup></span> analysis (event package prepared by Harry Cliff). The B<sup>0</sup> vertex is the analysis refit. The B<sup>0</sup> momentum is the sum of the two muon momenta from the track fit, and the decay time is flight distance × mass / momentum.</li>
+            <li>2025 event: calorimeter cells and all muon hits decoded from the raw data stored with the event, using the live event display’s own tools. For the most energetic clusters the summed cell energies agree with the trigger’s own reconstruction to within about 5%.</li>
+            <li>2024 events: only the electromagnetic-calorimeter clusters reconstructed by the trigger are stored, so there is no hadronic calorimeter or full muon-hit information.</li>
+          </ul>
+          <h3>Detector and drawing</h3>
+          <ul>
+            <li>Detector: the official LHCb geometry (DD4hep, 2025 version, as used by the Phoenix event display).</li>
+            <li>Lines between measured points are interpolated for display, and the other tracks get a single bend in the magnet.</li>
+            <li>Rendered with three.js from the numbers alone. The rendering code was written with an AI coding assistant; no AI image generation is involved.</li>
+          </ul>
+          <h3>Using the images</h3>
+          <ul>
+            <li>Use the suggested caption or keep its key words: <em>candidate</em> for the real events, <em>simulated</em> or <em>visualisation</em> for the simulation.</li>
+            <li>Credit: LHCb Collaboration / Federico Leo Redi.</li>
+            <li>Lossless PNG versions are available on <a href="mailto:Federico.Redi@cern.ch">request</a>.</li>
+          </ul>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="colophon">
+      <p>Prepared by Federico Leo Redi for LHCb outreach, 2 November 2026. Times are GMT; masses are from the analysis refit, momenta from the muon track fits. <a class="home" href="../">Back to the home page</a>.</p>
+    </footer>
+
+  </div>
+
+  <dialog class="lightbox" id="lightbox" aria-label="Enlarged image">
+    <div class="lb">
+      <img id="lb-img" alt="">
+      <div class="bar">
+        <h4 id="lb-title"></h4>
+        <div class="acts">
+          <a id="lb-download" href="#" download>Download JPEG</a>
+          <button class="textbtn" type="button" id="lb-close">Close</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+  // Progressive enhancement only: without JavaScript the images, enlarge links and downloads all work.
+  (function () {
+    "use strict";
+    var lb = document.getElementById("lightbox");
+    var lbImg = document.getElementById("lb-img"), lbTitle = document.getElementById("lb-title"), lbDl = document.getElementById("lb-download");
+
+    function copyText(text, statusEl, selectEl) {
+      function selected() {
+        if (selectEl) { var r = document.createRange(); r.selectNodeContents(selectEl); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); }
+        statusEl.textContent = "Selected: press Ctrl+C or ⌘C to copy."; statusEl.className = "status warn";
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () { statusEl.textContent = "Copied."; statusEl.className = "status"; }, selected);
+      } else selected();
+    }
+
+    document.querySelectorAll(".event").forEach(function (ev) {
+      var stage = ev.querySelector(".stage"), big = stage.querySelector("img");
+      var name = stage.getAttribute("data-title"), heading = ev.querySelector("h3").innerHTML;
+      var variants = ev.querySelectorAll(".variant"), dls = ev.querySelectorAll(".dl");
+      var current = variants[0];
+      variants.forEach(function (b) {
+        b.addEventListener("click", function () {
+          current = b;
+          var id = b.getAttribute("data-img");
+          big.src = "img/view/" + id + ".jpg";
+          big.alt = name + ", " + b.getAttribute("data-label").toLowerCase();
+          stage.href = "img/view/" + id + ".jpg";
+          variants.forEach(function (o) { o.setAttribute("aria-pressed", o === b ? "true" : "false"); });
+          dls.forEach(function (d) { d.classList.toggle("current", d.getAttribute("data-img") === id); });
+        });
+      });
+      stage.addEventListener("click", function (e) {
+        if (typeof lb.showModal !== "function") return; // old browser: follow the link
+        e.preventDefault();
+        var id = current.getAttribute("data-img");
+        var dl = ev.querySelector('.dl[data-img="' + id + '"]');
+        lbImg.src = "img/view/" + id + ".jpg"; lbImg.alt = big.alt;
+        lbTitle.innerHTML = heading + " · " + current.getAttribute("data-label");
+        lbDl.href = dl.getAttribute("href");
+        lbDl.textContent = "Download JPEG (" + dl.querySelector(".dl-meta").textContent.replace("JPEG · ", "") + ")";
+        lb.showModal();
+      });
+      var copyBtn = ev.querySelector(".copy");
+      copyBtn.addEventListener("click", function () {
+        var cap = ev.querySelector(".captext");
+        copyText(cap.getAttribute("data-copy") || cap.textContent, copyBtn.nextElementSibling, cap);
+      });
+    });
+
+    document.getElementById("lb-close").addEventListener("click", function () { lb.close(); });
+    lb.addEventListener("click", function (e) { if (e.target === lb) lb.close(); });
+    document.getElementById("copy-credit").addEventListener("click", function () {
+      var t = document.getElementById("credit-text");
+      copyText(t.textContent, document.getElementById("credit-status"), t);
+    });
+  })();
+  </script>
+</body>
+</html>

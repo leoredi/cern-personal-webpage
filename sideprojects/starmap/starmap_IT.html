@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>La Nostra Mappa Stellare</title>
+  <style>
+    :root {
+      --bg0: #030d1d;
+      --bg1: #0a1f40;
+      --bg2: #123865;
+      --ink: #f3f7ff;
+      --soft: #b6c8e5;
+      --gold: #f2cf88;
+      --line: rgba(242, 207, 136, 0.3);
+      --card: rgba(8, 25, 48, 0.82);
+      --maxw: 1120px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+      line-height: 1.46;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.14) 0 1px, transparent 1px),
+        radial-gradient(circle at 78% 8%, rgba(255, 255, 255, 0.11) 0 1px, transparent 1px),
+        radial-gradient(circle at 66% 72%, rgba(255, 255, 255, 0.1) 0 1px, transparent 1px),
+        linear-gradient(168deg, var(--bg0), var(--bg1) 35%, var(--bg2));
+      background-size: 3px 3px, 3px 3px, 3px 3px, cover;
+    }
+
+    .wrap {
+      width: min(var(--maxw), 92vw);
+      margin: 0 auto;
+      padding: 2.2rem 0 4rem;
+    }
+
+    header {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 2rem 1.5rem;
+      background: linear-gradient(120deg, rgba(8, 27, 54, 0.92), rgba(18, 49, 89, 0.85));
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.28);
+    }
+
+    h1, h2 {
+      margin: 0 0 0.45rem;
+      color: var(--gold);
+      line-height: 1.2;
+    }
+
+    h1 {
+      font-size: clamp(1.8rem, 4vw, 3.1rem);
+      letter-spacing: 0.02em;
+    }
+
+    h2 {
+      font-size: clamp(1.24rem, 2.5vw, 1.9rem);
+      margin-top: 2.15rem;
+    }
+
+    h3 {
+      margin: 0;
+      color: var(--gold);
+      font-size: 1.05rem;
+      line-height: 1.25;
+    }
+
+    p { margin: 0.62rem 0 0; }
+
+    .lead {
+      margin: 0.68rem 0 0;
+      font-size: clamp(1rem, 1.9vw, 1.18rem);
+      max-width: 74ch;
+    }
+
+    .pin {
+      margin-top: 1rem;
+      padding: 0.86rem 1rem;
+      border-left: 3px solid var(--gold);
+      background: rgba(0, 0, 0, 0.2);
+      color: var(--soft);
+      font-family: "Menlo", "SFMono-Regular", "Courier New", monospace;
+      font-size: 0.84rem;
+      line-height: 1.45;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--card);
+      padding: 1rem;
+      margin-top: 0.95rem;
+    }
+
+    .stamp {
+      margin: 0.18rem 0 0.75rem;
+      color: var(--soft);
+      font-family: "Menlo", "SFMono-Regular", "Courier New", monospace;
+      font-size: 0.82rem;
+    }
+
+    .two {
+      display: grid;
+      gap: 0.82rem;
+      grid-template-columns: 1fr;
+    }
+
+    .three {
+      display: grid;
+      gap: 0.82rem;
+      grid-template-columns: 1fr;
+      margin-top: 0.82rem;
+    }
+
+    .compare-top { margin-top: 0.82rem; }
+
+    figure.portrait {
+      text-align: center;
+    }
+
+    figure.portrait img {
+      width: min(100%, 560px);
+      margin: 0 auto;
+    }
+
+    @media (min-width: 820px) {
+      .two { grid-template-columns: 1fr 1fr; }
+      .three { grid-template-columns: 1fr 1fr 1fr; }
+    }
+
+    figure {
+      margin: 0;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 11px;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 0.55rem;
+    }
+
+    figure img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 7px;
+    }
+
+    figcaption {
+      margin-top: 0.44rem;
+      color: var(--soft);
+      font-size: 0.82rem;
+    }
+
+    .timeline {
+      margin-top: 1rem;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .refs {
+      margin-top: 0.9rem;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(8, 24, 47, 0.78);
+      padding: 0.95rem 1rem;
+    }
+
+    .refs h3 { font-size: 0.98rem; }
+
+    .refs a {
+      color: var(--ink);
+      text-decoration: underline;
+      text-decoration-color: rgba(242, 207, 136, 0.7);
+      text-underline-offset: 2px;
+    }
+
+    .refs ul {
+      margin: 0.52rem 0 0;
+      padding-left: 1rem;
+    }
+
+    .refs li { margin-top: 0.36rem; }
+
+    .meta-proof {
+      margin-top: 0.65rem;
+      padding: 0.65rem 0.75rem;
+      border-radius: 9px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(0, 0, 0, 0.24);
+      font-family: "Menlo", "SFMono-Regular", "Courier New", monospace;
+      color: var(--soft);
+      font-size: 0.76rem;
+      line-height: 1.45;
+      word-break: break-word;
+    }
+
+    .final {
+      margin-top: 2.2rem;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 1.2rem;
+      background: linear-gradient(160deg, rgba(10, 31, 60, 0.95), rgba(7, 21, 41, 0.93));
+    }
+
+    .actions {
+      margin-top: 0.88rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+    }
+
+    .actions a {
+      text-decoration: none;
+      color: #081320;
+      background: var(--gold);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 999px;
+      padding: 0.48rem 0.86rem;
+      font-weight: 700;
+      font-family: "Menlo", "SFMono-Regular", "Courier New", monospace;
+      font-size: 0.78rem;
+    }
+
+    .footer {
+      margin-top: 1.8rem;
+      color: var(--soft);
+      border-top: 1px solid var(--line);
+      padding-top: 0.9rem;
+      font-size: 0.92rem;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <h1>Il grande ritorno di dedeHorizon!</h1>
+      <p class="lead">
+        Volevo un'immagine onesta: il cielo da un luogo esatto, in un istante esatto,
+        legato al nostro ricordo di Leonard Cohen in Piazza Santa Croce. Ho iniziato studiando
+        le soluzioni commerciali per mappe stellari, poi ho costruito la mia versione fisicamente coerente.
+        Questa pagina parte dalla ricerca che ho fatto e poi racconta come ho costruito il poster finale.
+      </p>
+      <div class="pin">
+        Punto spaziotemporale scelto:
+        <code>2010-09-01T20:00:00Z @ 43.77N 11.25E (J2000)</code><br>
+        Convertito nell'ora locale di Firenze (Europe/Rome): <code>2010-09-01 22:00 CEST</code>,
+        circa 45 minuti dopo l'inizio del concerto alle 21:15.
+      </div>
+    </header>
+
+    <section>
+      <h2>Rassegna Della Letteratura I - Come Identificare Un Punto Nello Spaziotempo</h2>
+
+      <article class="card">
+        <h3>Cosa e' minimamente necessario</h3>
+        <p>
+          Un "pin" del cielo fisicamente significativo richiede tre ingredienti: tempo esatto, posizione esatta dell'osservatore
+          e sistema di riferimento. Ho usato un timestamp UTC in stile ISO con <code>Z</code> finale, latitudine/longitudine geografiche
+          e un'etichetta di riferimento astronomico (<code>J2000</code>).
+        </p>
+        <p>
+          In astronomia questo funziona perche' il cielo osservato (altezza/azimut) dipende dalla latitudine dell'osservatore
+          e dall'angolo orario locale; quindi, se cambia il tempo o cambia il luogo, cambia anche la mappa del cielo.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>Dal "pin terrestre" al "pin universale"</h3>
+        <p>
+          Per questo regalo, un pin terrestre era esattamente quello che mi serviva. Pero' ho anche studiato
+          come l'astronomia vada oltre la notazione geocentrica: ICRF (riferimento inerziale legato ai quasar),
+          riferimento baricentrico del Sistema Solare e concetto della mappa a pulsar di Voyager per una localizzazione universale.
+        </p>
+        <p>
+          Quindi questo progetto usa intenzionalmente un pin umano/terrestre (perche' il ricordo e' terrestre),
+          pur rispettando gli standard astronomici professionali.
+        </p>
+      </article>
+
+      <div class="refs">
+        <h3>Fonti principali consultate</h3>
+        <ul>
+          <li>
+            Profilo RFC 3339 per stringhe data/ora in stile ISO:
+            <a href="https://www.rfc-editor.org/rfc/rfc3339" target="_blank" rel="noopener">rfc-editor.org/rfc/rfc3339</a>
+          </li>
+          <li>
+            U.S. Naval Observatory: relazione tra coordinate del cielo locale, luogo e tempo:
+            <a href="https://aa.usno.navy.mil/faq/alt_az" target="_blank" rel="noopener">aa.usno.navy.mil/faq/alt_az</a>
+          </li>
+          <li>
+            U.S. Naval Observatory: epoca J2000 (JD 2451545.0, TT):
+            <a href="https://aa.usno.navy.mil/faq/TT" target="_blank" rel="noopener">aa.usno.navy.mil/faq/TT</a>
+          </li>
+          <li>
+            IERS/ICRF (riferimento celeste legato ai quasar):
+            <a href="https://www.iers.org/IERS/EN/Science/ICRF/ICRF.html" target="_blank" rel="noopener">iers.org - ICRF</a>
+          </li>
+          <li>
+            NASA/JPL: mappa a pulsar del Voyager Golden Record:
+            <a href="https://science.nasa.gov/mission/voyager/golden-record-cover/" target="_blank" rel="noopener">science.nasa.gov - Golden Record cover</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Rassegna Della Letteratura II - Rappresentazione Della Via Lattea</h2>
+
+      <article class="card">
+        <h3>Da dove sono partito: mappe stellari commerciali</h3>
+        <p>
+          Il mio primo passo e' stato rivedere gli stili di mappe stellari commerciali.
+          Spesso sono eleganti visivamente, ma in genere sono generici dal punto di vista fisico:
+          niente coordinate esplicite dell'osservatore, nessun timestamp UTC rigoroso, nessuna dichiarazione chiara del sistema di riferimento
+          e nessuna effemeride planetaria trasparente.
+        </p>
+        <p>
+          Perfetto per decorazione, ma non sufficiente per un vero poster "questo era il nostro cielo in quell'istante".
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>Il mio primo tentativo: Via Lattea vettoriale</h3>
+        <p>
+          Dopo quel benchmark ho costruito il mio layer della Via Lattea in stile vettoriale. In teoria i vettori sono eleganti
+          e indipendenti dalla risoluzione. In pratica, segmenti poligonali lunghi nelle coordinate celesti possono comportarsi male
+          dopo la proiezione (wrap di RA, comportamento ai poli e chiusura degli anelli), creando cunei o ponti artificiali.
+        </p>
+        <p>
+          Il render completo qui sotto mostra il tipo di artefatto che dovevo eliminare.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>L'approccio che ha risolto il problema</h3>
+        <p>
+          Sono passato a un approccio con mappa d'intensita' a cielo completo, poi riproiettata sulla cupola celeste locale.
+          La sorgente che ho usato e' NASA SVS "Deep Star Maps 2020" (prodotti OpenEXR full-sky).
+          Questo evita gli artefatti topologici dei poligoni e preserva una struttura realistica della Via Lattea.
+        </p>
+        <div class="meta-proof">
+          Provenienza incorporata nei metadati PNG di output:<br>
+          <code>Milky Way Image: From NASA's Scientific Visualization Studio (SVS) "Deep Star Maps 2020". Source: https://svs.gsfc.nasa.gov/4851</code>
+        </div>
+      </article>
+
+      <figure class="portrait">
+        <img src="assets/img/navy_star_map_WRONG_render.png" alt="Render completo del primo tentativo errato della Via Lattea vettoriale">
+        <figcaption>Render completo del mio primo tentativo di Via Lattea vettoriale (<code>navy_star_map_WRONG.svg</code>).</figcaption>
+      </figure>
+
+      <div class="two compare-top">
+        <figure>
+          <img src="assets/img/wrong.jpg" alt="Esempio di mappa statica in stile commerciale">
+          <figcaption>Riferimento commerciale: pulito visivamente, ma fisicamente generico.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/img/sky_mw_only.png" alt="Risultato della Via Lattea riproiettata fisicamente">
+          <figcaption>Il mio layer della Via Lattea riproiettato fisicamente (dipendente da osservatore e tempo).</figcaption>
+        </figure>
+      </div>
+
+      <div class="refs">
+        <h3>Fonti principali consultate</h3>
+        <ul>
+          <li>
+            NASA SVS Deep Star Maps 2020 (dataset e note):
+            <a href="https://svs.gsfc.nasa.gov/4851/" target="_blank" rel="noopener">svs.gsfc.nasa.gov/4851</a>
+          </li>
+          <li>
+            NASA SVS: spiegazione di proiezioni e trasformazioni:
+            <a href="https://svs.gsfc.nasa.gov/4851/" target="_blank" rel="noopener">note sulla proiezione nella stessa pagina</a>
+          </li>
+          <li>
+            IAU: standardizzazione storica dei confini delle costellazioni (contesto per le convenzioni cartografiche):
+            <a href="https://www.iau.org/public/themes/constellations/" target="_blank" rel="noopener">iau.org/public/themes/constellations</a>
+          </li>
+          <li>
+            ESA Gaia: risorse per mappe all-sky (famiglia alternativa fisicamente coerente):
+            <a href="https://www.cosmos.esa.int/web/gaia/iow_20210520" target="_blank" rel="noopener">cosmos.esa.int - risorse Gaia</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Come Si E' Evoluto Il Poster</h2>
+      <div class="timeline">
+        <article class="card">
+          <h3>1) Punto di partenza: riferimenti commerciali, poi prime bozze personali</h3>
+          <p class="stamp">22 gennaio 2026 - primo pomeriggio</p>
+          <p>
+            Sono partito da riferimenti visivi commerciali, ho identificato cosa fosse fisicamente generico
+            e poi sono passato alle mie prime bozze per fissare atmosfera e composizione.
+            Primo passaggio utile, ma ancora sbagliato in geometria e fedelta' scientifica.
+          </p>
+          <figure>
+            <img src="assets/img/navy_star_map_wrong.png" alt="Bozza iniziale">
+            <figcaption>Fase di bozza iniziale.</figcaption>
+          </figure>
+        </article>
+
+        <article class="card">
+          <h3>2) Base di realismo del cielo</h3>
+          <p class="stamp">22 gennaio 2026 - pomeriggio</p>
+          <p>
+            Poi mi sono concentrato sulla coerenza fisica: filtro dell'orizzonte, magnitudini stellari realistiche
+            e prima riproiezione stabile della Via Lattea.
+          </p>
+          <div class="two">
+            <figure>
+              <img src="assets/img/sky_mw_only.png" alt="Layer di test della Via Lattea">
+              <figcaption>Layer di test con sola Via Lattea.</figcaption>
+            </figure>
+            <figure>
+              <img src="assets/img/sky.png" alt="Risultato base del cielo">
+              <figcaption>Output base del cielo realistico.</figcaption>
+            </figure>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>3) Composizione A2 stampabile</h3>
+          <p class="stamp">22 gennaio 2026 - tardo pomeriggio</p>
+          <p>
+            Quando il modello del cielo e' diventato stabile, ho costruito il poster A2 con citazione, titolo, cornice e tipografia bilanciata.
+          </p>
+          <div class="two">
+            <figure>
+              <img src="assets/img/poster_a2_mw_only.png" alt="Layer Via Lattea A2">
+              <figcaption>Layer Via Lattea in formato A2.</figcaption>
+            </figure>
+            <figure>
+              <img src="assets/img/poster_a2.png" alt="Poster A2">
+              <figcaption>Poster completo A2.</figcaption>
+            </figure>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>4) Ridisegno quadrato + rifinitura finale</h3>
+          <p class="stamp">23 gennaio 2026</p>
+          <p>
+            Fase finale: formato quadrato, correzioni di spaziatura, scelta tipografica monofix ed export ad alta risoluzione.
+          </p>
+          <div class="two">
+            <figure>
+              <img src="assets/img/poster_18x18_highres.png" alt="Versione quadrata ad alta risoluzione">
+              <figcaption>Export 18x18 ad alta risoluzione.</figcaption>
+            </figure>
+            <figure>
+              <img src="assets/img/poster_square.png" alt="Poster quadrato finale">
+              <figcaption>Poster quadrato finale.</figcaption>
+            </figure>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="final">
+      <h2>Risultato Finale</h2>
+      <p>
+        File finale del poster: <code>assets/img/poster_square.png</code> (5400 x 5400).
+      </p>
+      <figure>
+        <img src="assets/img/poster_square.png" alt="Mappa stellare finale">
+      </figure>
+      <div class="actions">
+        <a href="assets/img/poster_square.png">Apri PNG Finale</a>
+        <a href="assets/img/poster_18x18_highres.png">Apri 18x18 Alta Risoluzione</a>
+      </div>
+    </section>
+
+    <p class="footer">
+      Costruito come un cielo esatto per un ricordo esatto.
+    </p>
+  </main>
+</body>
+</html>

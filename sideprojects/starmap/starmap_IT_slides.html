@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mappa Stellare - Slides IT</title>
+  <style>
+    :root {
+      --bg0: #020916;
+      --bg1: #0a1c3c;
+      --ink: #f5f7ff;
+      --soft: #b7c7e6;
+      --gold: #f2cf88;
+      --line: rgba(242, 207, 136, 0.35);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      height: 100%;
+      color: var(--ink);
+      background: linear-gradient(165deg, var(--bg0), var(--bg1));
+      font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+      scroll-behavior: smooth;
+    }
+
+    main {
+      height: 100vh;
+      overflow-y: auto;
+      scroll-snap-type: y mandatory;
+    }
+
+    .slide {
+      min-height: 100vh;
+      scroll-snap-align: start;
+      display: grid;
+      align-content: center;
+      gap: 1rem;
+      width: min(1200px, 94vw);
+      margin: 0 auto;
+      padding: 2.2rem 0 2.6rem;
+    }
+
+    .title {
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 2.2rem 1.2rem;
+      background: rgba(7, 25, 49, 0.8);
+    }
+
+    h1, h2 {
+      margin: 0;
+      color: var(--gold);
+      line-height: 1.15;
+    }
+
+    h1 { font-size: clamp(2rem, 5vw, 4rem); }
+    h2 { font-size: clamp(1.45rem, 3.2vw, 2.5rem); }
+
+    p {
+      margin: 0.55rem 0 0;
+      font-size: clamp(1rem, 1.6vw, 1.25rem);
+      color: var(--ink);
+      line-height: 1.4;
+    }
+
+    .soft { color: var(--soft); }
+
+    .pin {
+      font-family: "Menlo", "SFMono-Regular", "Courier New", monospace;
+      font-size: 0.9rem;
+      color: var(--soft);
+      margin-top: 1rem;
+      line-height: 1.45;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(8, 24, 47, 0.8);
+      padding: 1rem;
+    }
+
+    .one-image img,
+    .two-images img,
+    .hero-final img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .one-image img {
+      max-height: 68vh;
+      object-fit: contain;
+    }
+
+    .two-images {
+      display: grid;
+      gap: 0.9rem;
+      grid-template-columns: 1fr;
+    }
+
+    @media (min-width: 900px) {
+      .two-images { grid-template-columns: 1fr 1fr; }
+    }
+
+    .caption {
+      margin-top: 0.5rem;
+      font-size: 0.92rem;
+      color: var(--soft);
+    }
+
+    .center { text-align: center; }
+
+    .hero-final img {
+      max-height: 72vh;
+      object-fit: contain;
+    }
+
+    .dots {
+      position: fixed;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: grid;
+      gap: 8px;
+      z-index: 20;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      background: rgba(255, 255, 255, 0.16);
+      transition: transform 120ms ease, background 120ms ease;
+    }
+
+    .dot.active {
+      transform: scale(1.25);
+      background: var(--gold);
+      border-color: var(--gold);
+    }
+
+  </style>
+</head>
+<body>
+  <main id="deck">
+    <section class="slide" id="s1">
+      <div class="title">
+        <h1>Il grande ritorno di dedeHorizon!</h1>
+        <p>Una sera precisa. Un luogo preciso. Un ricordo preciso.</p>
+        <div class="pin">
+          2010-09-01T20:00:00Z @ 43.77N 11.25E (J2000)<br>
+          Firenze locale: 22:00 CEST
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="s2">
+      <div class="card center">
+        <h2>Da dove sono partito</h2>
+        <p class="soft">Prima ho studiato le mappe commerciali.</p>
+      </div>
+      <div class="one-image">
+        <img src="assets/img/wrong.jpg" alt="Riferimento commerciale">
+        <p class="caption">Belle da vedere, ma non legate in modo rigoroso a tempo/luogo/frame fisico.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="s3">
+      <div class="card center">
+        <h2>Primo tentativo personale</h2>
+        <p class="soft">Via Lattea vettoriale: elegante, ma con artefatti di proiezione.</p>
+      </div>
+      <div class="one-image">
+        <img src="assets/img/navy_star_map_WRONG_render.png" alt="Tentativo vettoriale iniziale errato">
+      </div>
+    </section>
+
+    <section class="slide" id="s4">
+      <div class="card center">
+        <h2>Il cambio giusto</h2>
+        <p class="soft">Mappa full-sky NASA SVS 2020 + riproiezione fisica locale.</p>
+      </div>
+      <div class="one-image">
+        <img src="assets/img/sky_mw_only.png" alt="Layer Via Lattea riproiettato fisicamente">
+        <p class="caption">Risultato coerente con osservatore, tempo e geometria del cielo.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="s5">
+      <div class="card center">
+        <h2>Evoluzione del poster</h2>
+        <p class="soft">Base realistica -> composizione A2 -> redesign quadrato.</p>
+      </div>
+      <div class="two-images">
+        <div>
+          <img src="assets/img/poster_a2.png" alt="Poster A2">
+          <p class="caption">Fase A2.</p>
+        </div>
+        <div>
+          <img src="assets/img/poster_18x18_highres.png" alt="Poster 18x18 alta risoluzione">
+          <p class="caption">Fase quadrata ad alta risoluzione.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="s6">
+      <div class="card center">
+        <h2>Risultato Finale</h2>
+        <p>assets/img/poster_square.png (5400 x 5400)</p>
+      </div>
+      <div class="hero-final">
+        <img src="assets/img/poster_square.png" alt="Mappa stellare finale">
+      </div>
+    </section>
+  </main>
+
+  <div class="dots" aria-hidden="true">
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+  </div>
+
+  <script>
+    const deck = document.getElementById("deck");
+    const slides = [...document.querySelectorAll(".slide")];
+    const dots = [...document.querySelectorAll(".dot")];
+
+    function activeIndex() {
+      const mid = deck.scrollTop + deck.clientHeight / 2;
+      let best = 0;
+      let dist = Infinity;
+      slides.forEach((s, i) => {
+        const c = s.offsetTop + s.offsetHeight / 2;
+        const d = Math.abs(c - mid);
+        if (d < dist) { dist = d; best = i; }
+      });
+      return best;
+    }
+
+    function updateDots() {
+      const idx = activeIndex();
+      dots.forEach((d, i) => d.classList.toggle("active", i === idx));
+    }
+
+    function go(delta) {
+      const idx = activeIndex();
+      const next = Math.max(0, Math.min(slides.length - 1, idx + delta));
+      slides[next].scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === " ") {
+        e.preventDefault();
+        go(1);
+      }
+      if (e.key === "ArrowUp" || e.key === "PageUp") {
+        e.preventDefault();
+        go(-1);
+      }
+      if (e.key === "Home") {
+        e.preventDefault();
+        slides[0].scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      if (e.key === "End") {
+        e.preventDefault();
+        slides[slides.length - 1].scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+
+    deck.addEventListener("scroll", updateDots, { passive: true });
+    updateDots();
+  </script>
+</body>
+</html>

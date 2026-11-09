@@ -1,0 +1,11 @@
+# ~/.zprofile — login shells only (Terminal.app, iTerm, ssh).
+# macOS runs /etc/zprofile -> path_helper, which pushes /usr/bin ahead of
+# Homebrew. Re-assert Homebrew here so `brew` tools win. Harmless if repeated.
+# On Linux this file does nothing.
+if [[ $OSTYPE == darwin* ]]; then
+  if [[ -x /opt/homebrew/bin/brew ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  elif [[ -x /usr/local/bin/brew ]]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+  fi
+fi

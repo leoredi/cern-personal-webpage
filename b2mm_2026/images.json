@@ -1,0 +1,79 @@
+{
+ "c5": {
+  "full": "img/full/LHCb_B0mumu_candidate_C5_run332869_6000x4000.jpg",
+  "filename": "LHCb_B0mumu_candidate_C5_run332869_6000x4000.jpg",
+  "mb": 2.9,
+  "w": 6000,
+  "h": 4000
+ },
+ "c5-zoom": {
+  "full": "img/full/LHCb_B0mumu_candidate_C5_run332869_vertex_closeup_6000x4000.jpg",
+  "filename": "LHCb_B0mumu_candidate_C5_run332869_vertex_closeup_6000x4000.jpg",
+  "mb": 3.6,
+  "w": 6000,
+  "h": 4000
+ },
+ "c5-white": {
+  "full": "img/full/LHCb_B0mumu_candidate_C5_run332869_white_6000x4000.jpg",
+  "filename": "LHCb_B0mumu_candidate_C5_run332869_white_6000x4000.jpg",
+  "mb": 2.4,
+  "w": 6000,
+  "h": 4000
+ },
+ "c3": {
+  "full": "img/full/LHCb_B0mumu_candidate_C3_run302433_6000x4000.jpg",
+  "filename": "LHCb_B0mumu_candidate_C3_run302433_6000x4000.jpg",
+  "mb": 2.7,
+  "w": 6000,
+  "h": 4000
+ },
+ "c3-zoom": {
+  "full": "img/full/LHCb_B0mumu_candidate_C3_run302433_vertex_closeup_6000x4000.jpg",
+  "filename": "LHCb_B0mumu_candidate_C3_run302433_vertex_closeup_6000x4000.jpg",
+  "mb": 3.2,
+  "w": 6000,
+  "h": 4000
+ },
+ "c3-white": {
+  "full": "img/full/LHCb_B0mumu_candidate_C3_run302433_white_6000x4000.jpg",
+  "filename": "LHCb_B0mumu_candidate_C3_run302433_white_6000x4000.jpg",
+  "mb": 2.2,
+  "w": 6000,
+  "h": 4000
+ },
+ "c4": {
+  "full": "img/full/LHCb_B0mumu_candidate_C4_run308388_6000x4000.jpg",
+  "filename": "LHCb_B0mumu_candidate_C4_run308388_6000x4000.jpg",
+  "mb": 3.0,
+  "w": 6000,
+  "h": 4000
+ },
+ "c4-zoom": {
+  "full": "img/full/LHCb_B0mumu_candidate_C4_run308388_vertex_closeup_6000x4000.jpg",
+  "filename": "LHCb_B0mumu_candidate_C4_run308388_vertex_closeup_6000x4000.jpg",
+  "mb": 3.6,
+  "w": 6000,
+  "h": 4000
+ },
+ "c4-white": {
+  "full": "img/full/LHCb_B0mumu_candidate_C4_run308388_white_6000x4000.jpg",
+  "filename": "LHCb_B0mumu_candidate_C4_run308388_white_6000x4000.jpg",
+  "mb": 2.4,
+  "w": 6000,
+  "h": 4000
+ },
+ "sim": {
+  "full": "img/full/B0mumu_SIMULATED_illustration_6000x4000.jpg",
+  "filename": "B0mumu_SIMULATED_illustration_6000x4000.jpg",
+  "mb": 3.0,
+  "w": 6000,
+  "h": 4000
+ },
+ "sim-labelled": {
+  "full": "img/full/B0mumu_SIMULATED_illustration_labelled_6000x4000.jpg",
+  "filename": "B0mumu_SIMULATED_illustration_labelled_6000x4000.jpg",
+  "mb": 3.7,
+  "w": 6000,
+  "h": 4000
+ }
+}
